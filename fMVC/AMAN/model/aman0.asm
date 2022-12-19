@@ -165,6 +165,8 @@ definitions:
 	LTLSPEC (forall $t1 in Airplane, $t2 in Airplane with g(($t1 != $t2 and search($t1, 0) != -1 and search($t2, 0) != -1 and not isUndef(search($t1, 0)) and not isUndef(search($t2, 0))) implies ((search($t1, 0)-search($t2, 0)>=3) or (search($t1, 0)-search($t2, 0)<=-3))))
 	// REQ6: An aircraft label cannot be moved into a blocked time period;
 	LTLSPEC (forall $a in Airplane, $t in Time with g(search($a, 0) = $t implies not blocked($t)))
+	// REQ15: The HOLD button must be available only when one aircraft label is selected
+	LTLSPEC (forall $a in Airplane, $t in Time with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))	
 
 	// MAIN RULE
 	main rule r_Main =
