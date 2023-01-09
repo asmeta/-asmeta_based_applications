@@ -197,7 +197,7 @@ public class AMANView implements AsmetaFMVCView {
 		frame.getContentPane().add(spnrNumMoves);
 		
 		JPanel currentTimePanel = new JPanel();
-		currentTimePanel.setBounds(124, -12, 97, 52);
+		currentTimePanel.setBounds(124, 0, 97, 40);
 		currentTimePanel.setBackground(Color.black);
 		currentTimePanel.setOpaque(true);
 		currentTimePanel.setBorder(new LineBorder(Color.WHITE));
