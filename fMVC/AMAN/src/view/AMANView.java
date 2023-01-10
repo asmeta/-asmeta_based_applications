@@ -55,6 +55,7 @@ public class AMANView implements AsmetaFMVCView {
 	JLabel lblCurrentTimeMins;
 
 	JLabel lblTwoDots;
+	JPanel currentTimePanel;
 
 	@AsmetaControlledLocation(asmLocationName = "hours", asmLocationType = LocationType.STRING)
 	JLabel lblCurrentTimeHours;
@@ -74,6 +75,8 @@ public class AMANView implements AsmetaFMVCView {
 
 	@AsmetaControlledLocation(asmLocationName = "timeShown", asmLocationType = LocationType.MAP, mapKeyType = LocationType.INTEGER)
 	JTable times;
+	
+	JLabel lblMoves;
 
 	@AsmetaMonitoredLocation(asmLocationName = "numMoves", asmLocationType = LocationType.INTEGER)
 	JSpinner spnrNumMoves;
@@ -87,13 +90,12 @@ public class AMANView implements AsmetaFMVCView {
 	JTable isLocked;
 
 	public AMANView() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-		//UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		
 		// The application frame
 		frame = new JFrame();
 		frame.getContentPane().setBackground(new Color(56, 87, 35));
 		frame.setResizable(false);
-		frame.setBounds(100, 100, 777, 840);
+		frame.setBounds(100, 100, 777, 810);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("ASMETA Aman");
@@ -127,19 +129,27 @@ public class AMANView implements AsmetaFMVCView {
 		// The moveUp button
 		btnMoveUp = new JButton("UP");
 		btnMoveUp.setBounds(434, 359, 128, 43);
-		btnMoveUp.setBackground(Color.LIGHT_GRAY);
+		btnMoveUp.setBackground(Color.BLACK);
+		btnMoveUp.setOpaque(true);
+		btnMoveUp.setBorder(new LineBorder(Color.WHITE));
+		btnMoveUp.setForeground(Color.RED);
+		btnMoveUp.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		frame.getContentPane().add(btnMoveUp);
 
 		// The moveDown button
 		btnMoveDown = new JButton("DOWN");
-		btnMoveDown.setBounds(566, 359, 128, 43);
-		btnMoveDown.setBackground(Color.LIGHT_GRAY);
+		btnMoveDown.setBounds(564, 359, 128, 43);
+		btnMoveDown.setBackground(Color.BLACK);
+		btnMoveDown.setOpaque(true);
+		btnMoveDown.setBorder(new LineBorder(Color.WHITE));
+		btnMoveDown.setForeground(Color.RED);
+		btnMoveDown.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		frame.getContentPane().add(btnMoveDown);
 
 		// The zoom value
 		lblZoomValue = new JLabel("45");
 		lblZoomValue.setHorizontalAlignment(SwingConstants.CENTER);
-		lblZoomValue.setBounds(704, 168, 61, 43);
+		lblZoomValue.setBounds(690, 168, 61, 43);
 		lblZoomValue.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
 		lblZoomValue.setForeground(Color.white);
 		frame.getContentPane().add(lblZoomValue);
@@ -154,6 +164,42 @@ public class AMANView implements AsmetaFMVCView {
 
 		// The column containing buttons
 		isLockedColumn = new ButtonColumn(isLocked, 0);
+		
+		// The label "Move"
+		lblMoves = new JLabel("MOVE");
+		lblMoves.setForeground(Color.RED);
+		lblMoves.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblMoves.setBounds(434, 329, 302, 14);
+		frame.getContentPane().add(lblMoves);
+		
+		// The panel containing data of minutes and hours
+		currentTimePanel = new JPanel();
+		currentTimePanel.setBounds(119, 0, 101, 40);
+		currentTimePanel.setBackground(Color.black);
+		currentTimePanel.setOpaque(true);
+		currentTimePanel.setBorder(new LineBorder(Color.WHITE));
+		frame.getContentPane().add(currentTimePanel);
+		
+		// The current time hours
+		lblCurrentTimeHours = new JLabel("0");
+		currentTimePanel.add(lblCurrentTimeHours);
+		lblCurrentTimeHours.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblCurrentTimeHours.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
+		lblCurrentTimeHours.setForeground(Color.white);
+		
+		// The current time dots
+		lblTwoDots = new JLabel(":");
+		currentTimePanel.add(lblTwoDots);
+		lblTwoDots.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTwoDots.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
+		lblTwoDots.setForeground(Color.white);
+		
+		// The current time minutes
+		lblCurrentTimeMins = new JLabel("0");
+		currentTimePanel.add(lblCurrentTimeMins);
+		lblCurrentTimeMins.setHorizontalAlignment(SwingConstants.LEFT);
+		lblCurrentTimeMins.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
+		lblCurrentTimeMins.setForeground(Color.white);
 
 		refreshView(true);
 	}
@@ -173,10 +219,8 @@ public class AMANView implements AsmetaFMVCView {
 		} else {
 			timelinePanel = new JPanel();
 			timelinePanel.setBounds(61, 40, 272, 890);
-			timelinePanel.setOpaque(false);
-			
-			frame.getContentPane().add(timelinePanel);
-			
+			timelinePanel.setOpaque(false);			
+			frame.getContentPane().add(timelinePanel);			
 		}
 
 		// Remove rows if more than the necessary are shown
@@ -192,59 +236,28 @@ public class AMANView implements AsmetaFMVCView {
 		// The spinner containing the number of moves
 		modelSpnrNumMoves = new SpinnerNumberModel(1, 1, nFlights, 1);
 		spnrNumMoves = new JSpinner(modelSpnrNumMoves);
-		spnrNumMoves.setBounds(704, 358, 43, 43);
+		spnrNumMoves.setBounds(695, 359, 41, 43);
 		spnrNumMoves.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 15));
-		frame.getContentPane().add(spnrNumMoves);
-		
-		JPanel currentTimePanel = new JPanel();
-		currentTimePanel.setBounds(124, 0, 97, 40);
-		currentTimePanel.setBackground(Color.black);
-		currentTimePanel.setOpaque(true);
-		currentTimePanel.setBorder(new LineBorder(Color.WHITE));
-		frame.getContentPane().add(currentTimePanel);
-		// The current time hours
-		lblCurrentTimeHours = new JLabel("0");
-		currentTimePanel.add(lblCurrentTimeHours);
-		lblCurrentTimeHours.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblCurrentTimeHours.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
-		// The current time dots
-		lblTwoDots = new JLabel(":");
-		currentTimePanel.add(lblTwoDots);
-		lblTwoDots.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTwoDots.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));						
-		// The current time minutes
-		lblCurrentTimeMins = new JLabel("0");
-		currentTimePanel.add(lblCurrentTimeMins);
-		lblCurrentTimeMins.setHorizontalAlignment(SwingConstants.LEFT);
-		lblCurrentTimeMins.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
-		
-		JLabel lblNewLabel = new JLabel("MOVE");
-		lblNewLabel.setForeground(Color.RED);
-		lblNewLabel.setBounds(434, 329, 302, 14);
-		frame.getContentPane().add(lblNewLabel);
-		//currentTimePanel.setBounds(null);
-		
+		spnrNumMoves.setForeground(Color.white);	
+		spnrNumMoves.setBackground(Color.BLACK);	
+		spnrNumMoves.setBorder(new LineBorder(Color.WHITE));
+		frame.getContentPane().add(spnrNumMoves);	
 		spnrNumMoves.repaint();
 
 		// The times
 		times = new JTable(nFlights, 1);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		TableColumnModel columnModel = times.getColumnModel();
 		columnModel.getColumn(0).setPreferredWidth(100);
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		centerRenderer.setOpaque(false);
-		//columnModel.getColumn(0).setCellRenderer(isLockedColumn);
 		columnModel.getColumn(0).setCellRenderer(centerRenderer);
 		times.setDefaultEditor(Object.class, null);
 		times.setEnabled(false);
 		times.setShowGrid(true);
 		times.setOpaque(false);
 		times.setBorder(new LineBorder(Color.WHITE));
-		times.setForeground(Color.white);
-		
-		//times.setMi
-		
-		
+		times.setForeground(Color.white);		
 		((DefaultTableCellRenderer) times.getDefaultRenderer(Object.class)).setOpaque(false);
 		timelinePanel.add(times);
 
