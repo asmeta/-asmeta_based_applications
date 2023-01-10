@@ -16,6 +16,7 @@ import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 import asmeta.fmvclib.annotations.AsmetaControlledLocation;
@@ -262,13 +263,17 @@ public class AMANView implements AsmetaFMVCView {
 		timelinePanel.add(times);
 
 		// The airplaneLabels
-		airplaneLabels = new JTable(nFlights, 1);
+		if (firstTime) {
+			airplaneLabels = new JTable(nFlights, 1);
+		} else {
+			DefaultTableModel model = new DefaultTableModel(nFlights, 1);
+			airplaneLabels.setModel(model);
+		}
 		airplaneLabels.setDefaultEditor(Object.class, null);
 		airplaneLabels.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		airplaneLabels.setShowGrid(false);
 		airplaneLabels.setOpaque(false);
-		((DefaultTableCellRenderer) airplaneLabels.getDefaultRenderer(Object.class)).setOpaque(false);
-		
+		((DefaultTableCellRenderer) airplaneLabels.getDefaultRenderer(Object.class)).setOpaque(false);		
 		timelinePanel.add(airplaneLabels);
 		
 	}
