@@ -9,7 +9,7 @@ export *
 
 signature:
 	// DOMAINS
-	domain Time subsetof Integer
+	domain TimeSlot subsetof Integer
 	domain ZoomValue subsetof Integer
 	abstract domain Airplane
 	enum domain Status = {UNSTABLE, STABLE, FREEZE}
@@ -18,7 +18,7 @@ signature:
 	
 	// FUNCTIONS
 	// Landing sequence: it should be bijective partially defined
-	controlled landingSequence: Time -> Airplane
+	controlled landingSequence: TimeSlot -> Airplane
 	
 	// The status shown on the interface
 	controlled statusOutput: Airplane -> Status  
@@ -27,14 +27,14 @@ signature:
 	monitored zoom: ZoomValue	
 	monitored selectedAirplane : Airplane
 	monitored action: PTCOAction
-	monitored timeToLock: Time
+	monitored timeToLock: TimeSlot
 	
-	controlled blocked: Time -> Boolean	
+	controlled blocked: TimeSlot -> Boolean	
 	controlled zoomValue : ZoomValue
-	controlled landingSequenceColor: Time -> Color
+	controlled landingSequenceColor: TimeSlot -> Color
 	
 	// Recursive function
-	static search: Prod(Airplane,Time) -> Time
+	static search: Prod(Airplane,TimeSlot) -> TimeSlot
 	// Function checking whether an airplane can be moved in the new position
 	static canBeMovedUp: Airplane -> Boolean
 	static canBeMovedDown: Airplane -> Boolean
@@ -47,12 +47,12 @@ signature:
 definitions:
 	
 	// DOMAIN DEFINITIONS
-	domain Time = {0 : 10}
+	domain TimeSlot = {0 : 10}
 	domain ZoomValue = {15 : 45}
 	
 	// FUNCTION DEFINITIONS
 	// The function searches the airplane with the specified landing time
-	function search($a in Airplane, $t in Time) = 
+	function search($a in Airplane, $t in TimeSlot) = 
 		if landingSequence($t) = $a then $t else 
 		if $t >= 10 then -1 else 
 		if $t < 10 then search($a, $t+1) 
@@ -164,9 +164,9 @@ definitions:
 	// REQ5: Aircraft labels should not overlap
 	LTLSPEC (forall $t1 in Airplane, $t2 in Airplane with g(($t1 != $t2 and search($t1, 0) != -1 and search($t2, 0) != -1 and not isUndef(search($t1, 0)) and not isUndef(search($t2, 0))) implies ((search($t1, 0)-search($t2, 0)>=3) or (search($t1, 0)-search($t2, 0)<=-3))))
 	// REQ6: An aircraft label cannot be moved into a blocked time period;
-	LTLSPEC (forall $a in Airplane, $t in Time with g(search($a, 0) = $t implies not blocked($t)))
+	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t implies not blocked($t)))
 	// REQ15: The HOLD button must be available only when one aircraft label is selected
-	LTLSPEC (forall $a in Airplane, $t in Time with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))	
+	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))	
 
 	// MAIN RULE
 	main rule r_Main =
@@ -200,16 +200,16 @@ definitions:
 
 // INITIAL STATE
 default init s0:
-	function landingSequence($t in Time) = if $t = 5 then a1 else 
-										   if $t = 2 then a2 else 
-										   undef endif endif
+	function landingSequence($t in TimeSlot) = if $t = 5 then a1 else 
+										   	   if $t = 2 then a2 else 
+										   	   undef endif endif
 	function zoomValue = 30
 	function action = NONE
 	function selectedAirplane = undef
 	function statusOutput($t in Airplane) = if $t = a1 then UNSTABLE else if $t = a2 then FREEZE else STABLE endif endif	
-	function landingSequenceColor($t in Time) = if $t = 5 then YELLOW else
+	function landingSequenceColor($t in TimeSlot) = if $t = 5 then YELLOW else
 												if $t = 2 then CYAN else
 												WHITE
 												endif endif
-	function blocked($t in Time) = if $t = 6 then true else false endif
+	function blocked($t in TimeSlot) = if $t = 6 then true else false endif
 	

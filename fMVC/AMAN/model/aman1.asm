@@ -8,7 +8,7 @@ export *
 
 signature:
 	// DOMAINS
-	domain Time subsetof Integer
+	domain TimeSlot subsetof Integer
 	domain ZoomValue subsetof Integer
 	abstract domain Airplane
 	enum domain Status = {UNSTABLE, STABLE, FREEZE}
@@ -17,10 +17,10 @@ signature:
 	
 	// FUNCTIONS
 	// Landing sequence: it should be bijective partially defined
-	controlled landingSequence: Time -> Airplane
+	controlled landingSequence: TimeSlot -> Airplane
 	// Inverse function for landingSequence: it gives the remaining
 	// time for the airplane landing
-	derived landingTime: Airplane -> Time
+	derived landingTime: Airplane -> TimeSlot
 	
 	// output aman 
 	// The status communicated by the PLAN component to AMAN
@@ -32,21 +32,21 @@ signature:
 	monitored zoom: ZoomValue	
 	monitored selectedAirplane : Airplane
 	monitored action: PTCOAction
-	monitored timeToLock: Time
+	monitored timeToLock: TimeSlot
 	// The number of moves to be done (UP or DOWN)
-	monitored numMoves: Time
+	monitored numMoves: TimeSlot
 	
-	controlled blocked: Time -> Boolean	
+	controlled blocked: TimeSlot -> Boolean	
 	controlled zoomValue : ZoomValue
-	controlled landingSequenceColor: Time -> Color
+	controlled landingSequenceColor: TimeSlot -> Color
 	
 	static color: Status -> Color
 	
 	// Recursive function
-	static search: Prod(Airplane,Time) -> Time
+	static search: Prod(Airplane,TimeSlot) -> TimeSlot
 	// Function checking whether an airplane can be moved in the new position
-	static canBeMovedUp: Prod(Airplane,Time) -> Boolean
-	static canBeMovedDown: Prod(Airplane,Time) -> Boolean
+	static canBeMovedUp: Prod(Airplane,TimeSlot) -> Boolean
+	static canBeMovedDown: Prod(Airplane,TimeSlot) -> Boolean
 	
 	static a1: Airplane
 	static a2: Airplane
@@ -56,7 +56,7 @@ signature:
 definitions:
 	
 	// DOMAIN DEFINITIONS
-	domain Time = {0 : 44}
+	domain TimeSlot = {0 : 44}
 	domain ZoomValue = {15 : 45}
 	
 	// FUNCTION DEFINITIONS
@@ -68,14 +68,14 @@ definitions:
 		endif endif endif
 
 	// The function searches the airplane with the specified landing time
-	function search($a in Airplane, $t in Time) = 
+	function search($a in Airplane, $t in TimeSlot) = 
 		if landingSequence($t) = $a then $t else 
 		if $t > zoomValue then undef
 		else search($a, $t+1) endif endif
 
 	function landingTime($a in Airplane) = search($a,0)
 	
-	function canBeMovedUp($airplane in Airplane, $nMov in Time) =
+	function canBeMovedUp($airplane in Airplane, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($airplane)) in
 			if ($currentLT + $nMov) <= 45 then if (landingSequence($currentLT + $nMov) != undef) then false
 			else if ($currentLT + $nMov + 1) <= 45 then if (landingSequence($currentLT + $nMov + 1) != undef) then false
@@ -84,7 +84,7 @@ definitions:
 			else true endif endif endif endif endif endif endif endif
 			endlet
 		
-	function canBeMovedDown($airplane in Airplane, $nMov in Time) =
+	function canBeMovedDown($airplane in Airplane, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($airplane)) in
 			if ($currentLT - $nMov) >= 0 then
 			if (landingSequence($currentLT - $nMov) != undef) then false
@@ -108,7 +108,7 @@ definitions:
 
 	// RULE DEFINITIONS
 	// the PLAN ATCo decides to move up an airplane
-	rule r_moveUp($a in Airplane, $manual in Boolean, $nMov in Time) =
+	rule r_moveUp($a in Airplane, $manual in Boolean, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($a)) in
 		if ($currentLT != undef) then
 			if $currentLT < zoomValue and not blocked($currentLT + $nMov) and canBeMovedUp($a, $nMov) then 
@@ -122,7 +122,7 @@ definitions:
 		endif endlet
 	
 	// the PLAN ATCo decides to move down an airplane
-	rule r_moveDown($a in Airplane, $manual in Boolean, $nMov in Time) =
+	rule r_moveDown($a in Airplane, $manual in Boolean, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($a)) in
 		if ($currentLT != undef) then
 			// The function is called by AMAN -> It is ok to execute without checking anything
@@ -179,7 +179,7 @@ definitions:
 	// REQ5: Aircraft labels should not overlap
 	// CTLSPEC (forall $t1 in Airplane, $t2 in Airplane with ag($t1 != $t2 implies ((landingTime($t1)-landingTime($t2)>=3) or (landingTime($t1)-landingTime($t2)<=-3))))
 	// REQ6: An aircraft label cannot be moved into a blocked time period;
-	// CTLSPEC (forall $a in Airplane, $t in Time with ag(landingTime($a) = $t implies not blocked($t)))
+	// CTLSPEC (forall $a in Airplane, $t in TimeSlot with ag(landingTime($a) = $t implies not blocked($t)))
 
 	// MAIN RULE
 	main rule r_Main =
@@ -199,7 +199,7 @@ definitions:
 
 // INITIAL STATE
 default init s0:
-	function landingSequence($t in Time) = if $t = 5 then a1 else 
+	function landingSequence($t in TimeSlot) = if $t = 5 then a1 else 
 										   if $t = 2 then a2 else
 										   if $t = 18 then a3 else
 										   if $t = 35 then a4 else 
@@ -208,11 +208,11 @@ default init s0:
 	function action = NONE
 	function selectedAirplane = undef
 	function statusOutput($t in Airplane) = if $t = a1 then UNSTABLE else if $t = a2 then FREEZE else STABLE endif endif	
-	function landingSequenceColor($t in Time) = if $t = 5 then YELLOW else
+	function landingSequenceColor($t in TimeSlot) = if $t = 5 then YELLOW else
 												if $t = 2 then CYAN else
 												WHITE
 												endif endif
 		// The following definition should be used
 		//color(statusOutput(landingSequence($t)))
-	function blocked($t in Time) = if $t = 6 then true else false endif
+	function blocked($t in TimeSlot) = if $t = 6 then true else false endif
 	

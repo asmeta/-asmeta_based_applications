@@ -16,7 +16,7 @@ signature:
 	derived currentTimeMins: Integer
 	derived currentTimeHours: Integer
 	
-	controlled timeShown: Time -> Minutes
+	controlled timeShown: TimeSlot -> Minutes
 	controlled lastTimeUpdated : Minutes
 	controlled mins : Minutes
 	controlled hours : Hours
@@ -46,14 +46,14 @@ definitions:
 	// Update the times shown in the timeline
 	rule r_update_time_shown =
 		par
-			forall $t in Time do
+			forall $t in TimeSlot do
 				timeShown($t) := mod(currentTimeMins + $t + 1, 60)
 			// If times have been shifted, shift all the airplanes too
 			if lastTimeUpdated != currentTimeMins then
 				par
 					lastTimeUpdated := currentTimeMins
 					forall $a in Airplane do r_moveDown[$a, false, 1]
-					forall $time in Time with $time > 0 do blocked($time - 1) := blocked($time) 
+					forall $time in TimeSlot with $time > 0 do blocked($time - 1) := blocked($time) 
 				endpar
 			endif
 		endpar
@@ -78,7 +78,7 @@ definitions:
 
 // INITIAL STATE
 default init s0:
-	function landingSequence($t in Time) = if $t = 5 then a1 else 
+	function landingSequence($t in TimeSlot) = if $t = 5 then a1 else 
 										   if $t = 2 then a2 else
 										   if $t = 18 then a3 else
 										   if $t = 35 then a4 else 
@@ -86,16 +86,16 @@ default init s0:
 	function zoomValue = 30
 	function action = NONE
 	function selectedAirplane = undef
-	function timeShown($t in Time) = ($t + 1)
+	function timeShown($t in TimeSlot) = ($t + 1)
 	function lastTimeUpdated = currentTimeMins
 	function statusOutput($t in Airplane) = if $t = a1 then UNSTABLE else if $t = a2 then FREEZE else STABLE endif endif	
-	function landingSequenceColor($t in Time) = if $t = 5 then YELLOW else
+	function landingSequenceColor($t in TimeSlot) = if $t = 5 then YELLOW else
 												if $t = 2 then CYAN else
 												WHITE
 												endif endif
 		// The following definition should be used
 		//color(statusOutput(landingSequence($t)))
-	function blocked($t in Time) = if $t = 6 then true else false endif
+	function blocked($t in TimeSlot) = if $t = 6 then true else false endif
 	function mins = 0
 	function hours = 0
 	
