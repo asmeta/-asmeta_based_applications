@@ -2,7 +2,6 @@ package view;
 
 import java.awt.Color;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,7 +12,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -22,7 +20,6 @@ import javax.swing.table.TableColumnModel;
 import asmeta.fmvclib.annotations.AsmetaControlledLocation;
 import asmeta.fmvclib.annotations.AsmetaMonitoredLocation;
 import asmeta.fmvclib.annotations.AsmetaRunStep;
-import asmeta.fmvclib.annotations.LocationType;
 import asmeta.fmvclib.controller.ButtonColumn;
 import asmeta.fmvclib.model.AsmetaFMVCModel;
 import asmeta.fmvclib.view.AsmetaFMVCView;
@@ -35,56 +32,56 @@ public class AMANView implements AsmetaFMVCView {
 
 	private JFrame frame;
 
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationType = LocationType.ENUM, asmLocationValue = "NONE")
-	@AsmetaMonitoredLocation(asmLocationName = "zoom", asmLocationType = LocationType.INTEGER)
+	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "NONE")
+	@AsmetaMonitoredLocation(asmLocationName = "zoom")
 	@AsmetaRunStep(repaintView = true)
 	private JSlider zoom;
 
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationType = LocationType.ENUM, asmLocationValue = "HOLD")
+	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "HOLD")
 	@AsmetaRunStep
 	JButton btnHold;
 
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationType = LocationType.ENUM, asmLocationValue = "DOWN")
+	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "DOWN")
 	@AsmetaRunStep
 	JButton btnMoveUp;
 
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationType = LocationType.ENUM, asmLocationValue = "UP")
+	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "UP")
 	@AsmetaRunStep
 	JButton btnMoveDown;
 
-	@AsmetaControlledLocation(asmLocationName = "mins", asmLocationType = LocationType.STRING)
+	@AsmetaControlledLocation(asmLocationName = "mins")
 	JLabel lblCurrentTimeMins;
 
 	JLabel lblTwoDots;
 	JPanel currentTimePanel;
 
-	@AsmetaControlledLocation(asmLocationName = "hours", asmLocationType = LocationType.STRING)
+	@AsmetaControlledLocation(asmLocationName = "hours")
 	JLabel lblCurrentTimeHours;
 
 	JPanel timelinePanel;
 
-	@AsmetaControlledLocation(asmLocationName = "zoomValue", asmLocationType = LocationType.STRING)
+	@AsmetaControlledLocation(asmLocationName = "zoomValue")
 	JLabel lblZoomValue;
 
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationType = LocationType.ENUM, asmLocationValue = "NONE")
+	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "NONE")
 	@AsmetaRunStep
 	Timer guiTimer;
 
-	@AsmetaControlledLocation(asmLocationName = "landingSequence", asmLocationType = LocationType.MAP, domainType = LocationType.INTEGER)
-	@AsmetaMonitoredLocation(asmLocationName = "selectedAirplane", asmLocationType = LocationType.RESERVE)
+	@AsmetaControlledLocation(asmLocationName = "landingSequence")
+	@AsmetaMonitoredLocation(asmLocationName = "selectedAirplane")
 	JTable airplaneLabels;
 
-	@AsmetaControlledLocation(asmLocationName = "timeShown", asmLocationType = LocationType.MAP, domainType = LocationType.INTEGER)
+	@AsmetaControlledLocation(asmLocationName = "timeShown")
 	JTable times;
 	
 	JLabel lblMoves;
 
-	@AsmetaMonitoredLocation(asmLocationName = "numMoves", asmLocationType = LocationType.INTEGER)
+	@AsmetaMonitoredLocation(asmLocationName = "numMoves")
 	JSpinner spnrNumMoves;
 	SpinnerNumberModel modelSpnrNumMoves;
 
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationType = LocationType.ENUM, asmLocationValue = "NONE")
-	@AsmetaMonitoredLocation(asmLocationName = "timeToLock", asmLocationType = LocationType.INTEGER)
+	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "NONE")
+	@AsmetaMonitoredLocation(asmLocationName = "timeToLock")
 	@AsmetaRunStep
 	ButtonColumn isLockedColumn;
 	IsLockedModel isLockedModel;

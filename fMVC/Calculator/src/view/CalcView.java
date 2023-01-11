@@ -16,13 +16,13 @@ import asmeta.fmvclib.view.AsmetaFMVCView;
 @SuppressWarnings("serial")
 public class CalcView extends JFrame implements AsmetaFMVCView {
     // Campi della view
-	@AsmetaMonitoredLocation(asmLocationName="number", asmLocationType = LocationType.INTEGER)
+	@AsmetaMonitoredLocation(asmLocationName="number")
     private JTextField m_userInputTf = new JTextField(5);
 	
-	@AsmetaControlledLocation(asmLocationName="calc_result", asmLocationType = LocationType.INTEGER)
+	@AsmetaControlledLocation(asmLocationName="calc_result")
     private JTextField m_totalTf     = new JTextField(20);
 	
-    @AsmetaMonitoredLocation(asmLocationName="operation", asmLocationType = LocationType.ENUM, asmLocationValue = "MULT")
+    @AsmetaMonitoredLocation(asmLocationName="operation", asmLocationValue = "MULT")
     @AsmetaRunStep
     private JButton    m_multiplyBtn = new JButton("Multiply");
     
