@@ -37,7 +37,7 @@ public class AMANView implements AsmetaFMVCView {
 
 	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationType = LocationType.ENUM, asmLocationValue = "NONE")
 	@AsmetaMonitoredLocation(asmLocationName = "zoom", asmLocationType = LocationType.INTEGER)
-	@AsmetaRunStep(refreshGui = true)
+	@AsmetaRunStep(repaintView = true)
 	private JSlider zoom;
 
 	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationType = LocationType.ENUM, asmLocationValue = "HOLD")
@@ -70,11 +70,11 @@ public class AMANView implements AsmetaFMVCView {
 	@AsmetaRunStep
 	Timer guiTimer;
 
-	@AsmetaControlledLocation(asmLocationName = "landingSequence", asmLocationType = LocationType.MAP, mapKeyType = LocationType.INTEGER)
+	@AsmetaControlledLocation(asmLocationName = "landingSequence", asmLocationType = LocationType.MAP, domainType = LocationType.INTEGER)
 	@AsmetaMonitoredLocation(asmLocationName = "selectedAirplane", asmLocationType = LocationType.RESERVE)
 	JTable airplaneLabels;
 
-	@AsmetaControlledLocation(asmLocationName = "timeShown", asmLocationType = LocationType.MAP, mapKeyType = LocationType.INTEGER)
+	@AsmetaControlledLocation(asmLocationName = "timeShown", asmLocationType = LocationType.MAP, domainType = LocationType.INTEGER)
 	JTable times;
 	
 	JLabel lblMoves;
@@ -202,7 +202,7 @@ public class AMANView implements AsmetaFMVCView {
 		lblCurrentTimeMins.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
 		lblCurrentTimeMins.setForeground(Color.white);
 
-		refreshView(true);
+		repaintView(true);
 	}
 
 	/**
@@ -210,7 +210,7 @@ public class AMANView implements AsmetaFMVCView {
 	 * number/type of components) when a step is performed
 	 */
 	@Override
-	public void refreshView(boolean firstTime) {
+	public void repaintView(boolean firstTime) {
 		int nFlights = Integer.parseInt(lblZoomValue.getText());
 
 		// The panel containing the timeline

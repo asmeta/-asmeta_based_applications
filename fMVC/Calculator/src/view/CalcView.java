@@ -77,7 +77,7 @@ public class CalcView extends JFrame implements AsmetaFMVCView {
     }
 
 	@Override
-	public void refreshView(boolean firstTime) {
+	public void repaintView(boolean firstTime) {
 
 	}
 
