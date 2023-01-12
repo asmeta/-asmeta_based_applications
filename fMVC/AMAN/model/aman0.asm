@@ -168,7 +168,8 @@ definitions:
 	// REQ15: The HOLD button must be available only when one aircraft label is selected
 	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))
 	// REQ3: Planes can be moved earlier or later on the timeline
-	
+	LTLSPEC (forall $a in Airplane, $t in Time with g(search($a, 0) = $t and selectedAirplane=$a and action = UP and canBeMovedUp($a) implies x(search($a, 0) = $t + 1)))
+	LTLSPEC (forall $a in Airplane, $t in Time with g(search($a, 0) = $t and selectedAirplane=$a and action = DOWN and canBeMovedDown($a) implies x(search($a, 0) = ($t - 1))))
 	// REQ4: Planes can be put on hold by the PLAN ATCo
 	LTLSPEC (forall $a in Airplane, $t in Time with g(search($a, 0) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
 
