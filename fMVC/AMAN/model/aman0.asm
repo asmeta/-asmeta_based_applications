@@ -166,7 +166,11 @@ definitions:
 	// REQ6: An aircraft label cannot be moved into a blocked time period;
 	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t implies not blocked($t)))
 	// REQ15: The HOLD button must be available only when one aircraft label is selected
-	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))	
+	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))
+	// REQ3: Planes can be moved earlier or later on the timeline
+	
+	// REQ4: Planes can be put on hold by the PLAN ATCo
+	LTLSPEC (forall $a in Airplane, $t in Time with g(search($a, 0) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
 
 	// MAIN RULE
 	main rule r_Main =
