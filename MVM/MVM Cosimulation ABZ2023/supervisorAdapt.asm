@@ -13,7 +13,6 @@ signature:
 	
 	enum domain Reply = {RESPONSE | ERROR | NORESPONSE}
 	
-	//breath_on = VENTILATIONON
 	enum domain Watchst = {INACTIVE | BREATHON | ALARM} //watchdogs bits status
 	
 	enum domain BuzState = {ENABLE|DISABLE}
@@ -269,7 +268,6 @@ definitions:
 			if(pi_6 > peep_max) then
 				par
 					if(count_ppmax >= 3) then
-						//state := FAILSAFE
 						r_failsafe[]
 					endif
 					count_ppmax := count_ppmax + 1 
@@ -283,7 +281,6 @@ definitions:
 		if(pi_6 > peak_max) then
 			par
 				if(count_pkmax > 2) then
-					//state := FAILSAFE
 					r_failsafe[]
 				endif
 				count_pkmax := count_pkmax + 1
@@ -317,7 +314,6 @@ definitions:
 			par
 			count_ie :=  count_ie + 1
 				if(count_ie >= 4) then
-					//state := FAILSAFE
 					r_failsafe[]
 				endif
 			endpar
@@ -392,7 +388,7 @@ definitions:
 						
 						rr_supp := revo(time_insp, calc_t(timer_exp))
 						
-						r_check_peep_max[]	//SUP 26.2
+		 				r_check_peep_max[]	//SUP 26.2
 						r_check_peep_min[]	//SUP.27.1	
 						
 						r_check_rr_min[]	//SUP.25.3	
@@ -453,7 +449,6 @@ definitions:
 						r_same[] // previous breath = of the current
 					endpar
 				else
-					//state := FAILSAFE
 					r_failsafe[]
 				endif
 				
@@ -492,12 +487,10 @@ definitions:
 	macro rule r_check_v =
 		if(breath_sync = INSP) then
 			if not(iValve = OPEN and oValve = CLOSED) then
-				//state := FAILSAFE
 				r_failsafe[]
 			endif
 		else if(breath_sync = EXP) then
 				if not(oValve = OPEN and iValve = CLOSED) then
-					//state := FAILSAFE
 					r_failsafe[]
 				endif
 			endif
@@ -506,7 +499,6 @@ definitions:
 	macro rule r_start_v =
  		par
  			r_firstbreath[]
-			//r_check_sync[] --eliminare
 			r_al_con[]
 			r_check_v[]				
 		endpar
@@ -522,7 +514,7 @@ definitions:
 		endpar
 					
 	macro rule r_stop_v =
- 		if not(expired(timer_breath)) then // è necessario?
+ 		if not(expired(timer_breath)) then 
  			par
  			state := VENTILATIONOFF
  			previous_breath := undef
@@ -533,7 +525,6 @@ definitions:
 		    r_reset_timer[timer4secondPassed]
 			endpar	
 		else
-			//state := FAILSAFE
 			r_failsafe[]
  		endif
 		
@@ -543,7 +534,6 @@ definitions:
 		if not(pi_6_reply = RESPONSE) then //response received with errors from pi_6
 			par
 				if(max_attempts(max_attempts_pi_6)) then
-					//state := FAILSAFE
 					r_failsafe[]
 				endif					
 				max_attempts_pi_6 := max_attempts_pi_6 + 1
@@ -557,7 +547,6 @@ definitions:
 		if not(adc_reply = RESPONSE) then //response received with errors from  adc
 			par
 				if(max_attempts(max_attempts_adc)) then
-					//state := FAILSAFE	
 					r_failsafe[]
 				endif
 				max_attempts_adc := max_attempts_adc + 1
@@ -580,7 +569,6 @@ definitions:
 						endpar
 					endif
 				else
-					//state := FAILSAFE
 					r_failsafe[]
 				endif
 			endpar
@@ -600,7 +588,6 @@ definitions:
 					endif
 				endpar
 		else 
-			//state := FAILSAFE
 			r_failsafe[]	
 		endif
 		
@@ -618,7 +605,6 @@ definitions:
 					endif
 				endpar
 			 else
-				//state := FAILSAFE
 				r_failsafe[]
 			endif		 	
 		
@@ -642,7 +628,6 @@ definitions:
 						endif
 					endpar			
 			else
-					//state := FAILSAFE	
 					r_failsafe[]
 			endif		
 	
@@ -660,27 +645,20 @@ definitions:
 						par
 							r_al_con[]
 							r_check_sync[]
-						/*	if(rr_supp != 0.0) then
-								par
-									r_check_rr_min[]
-									r_check_rr_max[]
-								endpar
-							endif*/
 							r_check_v[] //SUP.25.1 //SUP.25.2
 						endpar
 					endif					
 			else
-				//state := FAILSAFE	
 				r_failsafe[]
 			endif
 									
 		macro rule r_oneSecTimer =
-		if(pi_6 <= 65) then //Da controllare
+		if(pi_6 <= 65) then 
 			r_reset_timer[timer1secondPassed]
 		endif
 		
 		macro rule r_fourSecTimer =
-		if(watchdog) then //Da controllare
+		if(watchdog) then 
 			r_reset_timer[timer4secondPassed]
 		endif
 				
@@ -695,8 +673,6 @@ main rule r_main =
 			 	r_failsafe[]
 			else
 				 par
-				 //freq_target := itor(rtoi(f_resp_target))
-				 //vol_curr_target := vt
 				 r_check_adc[]
 				 r_check_pi6[]
 					 if (adc_reply = RESPONSE) //SUP.100.2 e SUP.17
