@@ -1,9 +1,8 @@
-asm MVMcontrollerAdapt
-//Third refinement: transition from inspiration to expiration and vice versa 
+ asm MVMcontrollerAdapt
 
-import ../CTLlibrary
-import ../LTLlibrary
-import ../TimeLibrary  
+import ../../CTLlibrary
+import ../../LTLlibrary
+import ../../TimeLibrary  
 
 signature:
 	//*************************************************
@@ -112,9 +111,7 @@ signature:
 	dynamic out vol_min_perc: Real // % vol min for sup
 	dynamic monitored dropPAW_ITS_ASV: Boolean
 	dynamic monitored flowDropASV: Boolean
-	//derived volMin:Real
 	derived vd:Real //Dead space
-	dynamic out respirationMode_sup: Modes
 	dynamic controlled freq_hist: Hist->Real //memory for frequencies	
 	dynamic controlled vol_hist: Hist->Real //memory for volumes
 	dynamic controlled freq_target: Real //target RR :Otis equation
@@ -151,7 +148,6 @@ definitions:
 	
 	function a_coeff=2.0*pwr(3.14,2.0)/60.0
 	function volume_min = weight*0.1*volMinPerc/100.0
-	//function volMin=pwr(weight,2.0)*100.0*volMinPerc/100.0
 	function vd=2.2*weight/1000.0
 	
 	function compute_freq_target ($freqmean in Real) = 
@@ -289,7 +285,6 @@ definitions:
 		endif
 	
 	rule r_computeOtisEq =
-	 	//let ($x =(sqrt(1.0+2.0*a_coeff*rcexp_in*(volMin-freq_hist(previous)*vd)/vd)-1.0)/(a_coeff*rcexp_in)) in 
 	 	let ($x =(pwr(1.0+2.0*a_coeff*rcexp_in*(volume_min-freq_hist(previous)*vd)/vd,(1/2))-1.0)/(a_coeff*rcexp_in)) in 
 	 		par
 				freq_hist(numCycle mod 8) :=$x
@@ -321,7 +316,6 @@ definitions:
 			par
 				run_command := true
 				stop_command := false
-				respirationMode_sup := respirationMode_doc
 				if respirationMode_doc = PCV	then r_PCV[] endif //REQ.6
 				if respirationMode_doc = PSV	then r_PSV[] endif //REQ.5
 				if respirationMode_doc = ASV	then r_ASV[] endif //REQ.5
@@ -362,7 +356,6 @@ definitions:
 			//when inspiration duration expires go to expiration based on selected mode
 			if expired(timerInspirationDurPCV)	then
 				par
-					respirationMode_sup := respirationMode_doc
 					if respirationMode_doc = PCV then
 						//in pause has precedence over rm and rm has precedence over expiration
 						if cmdInPause then //CMM.4
@@ -400,10 +393,7 @@ definitions:
 				if expired(timerExpirationDurPCV) then
 					if respirationMode_out = ASV 
 						then 
-							par
-								r_ASV[]
-								respirationMode_sup := respirationMode_out 
-							endpar
+							r_ASV[]
 					else
 					//ex pause has precedence over inspiration
 						if cmdExPause then //PCV.8 //CMM.5
@@ -415,10 +405,7 @@ definitions:
 				else if expired(timerTriggerWindowDelay) and dropPAW_ITS then //PCV.7 CMM.9
 					if respirationMode_out = ASV 
 						then 
-							par
-								r_ASV[]
-								respirationMode_sup := respirationMode_out
-							endpar 
+							r_ASV[]
 					else
 						par
 							r_PCVStartInsp[]
@@ -539,7 +526,6 @@ definitions:
 			else 
 			if expired(timerMinExpTimePSV) then //CMM.9
 				par
-					respirationMode_sup := respirationMode_doc
 					if respirationMode_doc = PCV then //REQ.9.2
 						par
 							state := PCV_STATE 
@@ -813,7 +799,6 @@ default init s0:
 	function startVentilation = false
 	function stopRequested = false
 	function respirationMode_out  = PCV	
-	function respirationMode_sup  = PCV	
 	
 	function cmdExPause = false
 	function cmdInPause = false

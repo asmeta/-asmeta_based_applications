@@ -1,6 +1,6 @@
 asm supervisorAdapt
-import ../StandardLibrary
-import ../TimeLibraryControlled
+import ../../StandardLibrary
+import ../../TimeLibraryControlled
 
 signature: 
 
@@ -35,7 +35,6 @@ signature:
  * INPUT SUPERVISOR	*
  ************************/	
 	dynamic monitored watchdog: Boolean 
-	dynamic monitored respirationMode_sup: Modes
 		
 	/* ***MONITORED*** */
 	//start - stop bits
@@ -95,9 +94,7 @@ signature:
 	
 	//out	
 	dynamic out al_bit: Alarm
-		
-	dynamic out respirationMode_out: Modes
-	//dynamic out respirationMode_out: Modes
+
 	/* 
 	 *	SUPPORT VARIABLES  
 	 */
@@ -136,11 +133,6 @@ signature:
 	dynamic controlled rr_supp:Real
 	dynamic controlled count_dropPAW: Integer
 	dynamic controlled ver_rr: Real	
-		
-	//dynamic monitored mCurrSecs: Integer
-	
-	dynamic controlled freq_target: Real 
-	dynamic controlled vol_curr_target: Real
 	
 	dynamic monitored limit_pa: Real
 	
@@ -161,26 +153,7 @@ signature:
 	
 	derived revo: Prod(Integer,Integer) -> Real
 	
-	/*Adapt */
-	derived vt_min: Real 
-	derived vol_min_target: Real
-	derived check_freq_max: Real
-	derived check_press_max: Real
 	
-	derived freq_max_mode1: Real 
-	derived freq_max_mode2: Real
-	
-	derived press_max_mode1: Real
-	derived press_max_mode2: Real
-	
-	derived vt: Real
-	derived vd: Real
-	derived rr: Real
-	derived alpha: Real
-	derived f_resp_target: Real
-	
-	derived otis_boundaries: Boolean
-	derived breath_triggered: Boolean
 	/********/
 	
 	/* 
@@ -207,17 +180,6 @@ definitions:
 	function paw_max = 65
 	function freq_min = 5 //cicli al minuto
 	
-	function alpha =
-		(2.0*(3.14159 * 3.14159))/60.0
-	
-	function vd =
-		(2.2 * weight_sup) / 1000.0
-	
-	function f_resp_target =
-		(pwr((1.0 + 2.0 * alpha * rcexp * ((vol_min_target - (f_prev) * vd)/vd)),0.5) - 1.0)/(alpha * rcexp)  
-	
-	function vt = 
-		vol_min_target / itor(rtoi(f_resp_target))
 	
 	function calc_t($t in Timer) =
 		currentTime($t) - start($t)
@@ -253,8 +215,6 @@ definitions:
 			false
 		endif
 	
-	function rr =
-		revo(time_insp, calc_t(timer_exp))
 	
 	function rr_check_min =
 		if(revo(time_insp, calc_t(timer_exp)) < min_rr) then
@@ -269,67 +229,8 @@ definitions:
 		else
 			false
 		endif		 
-	//Lettera B
-	function vt_min =
-		 (4.4 * weight_sup)/1000.0
-		 
-	function vol_min_target =
-		 (weight_sup * 0.1 * ((vol_min_perc)/100.0)) //problema segnalato
-		 	
-	/*Questa è la lettera C */ 
-	function freq_max_mode1 = 
-	 	vol_min_target/vt_min
-	 
-	//da controllare 
-	function freq_max_mode2 =
-		20.0 * rcexp
-	 
-	function check_freq_max = 
-		if(freq_max_mode1<freq_max_mode2 and freq_max_mode1 < 60.0)then 
-	 		freq_max_mode1
-		else 
-			if(freq_max_mode2<freq_max_mode1 and freq_max_mode2 < 60.0) then
-		 		freq_max_mode2
-		 	else
-	 			if(freq_max_mode1 > 60.0 and freq_max_mode2 >= freq_max_mode1) then
-	 				60.0
-	 			endif
-	 		endif
-	 	endif
-	 
-	 /*Questa è la lettera A */
-	 function press_max_mode1 =
-	   compliance * (limit_pa - 10.0 - peep)	 	
-	 
-	 function press_max_mode2 =
-	 	(22.0 * weight_sup)/1000.0 /**è peso / 1000 */
-	 	//div(mult(22.0,weight_sup),1000.0)
-	 
-	 function check_press_max =
-	 	if(press_max_mode1 < press_max_mode2) then
-	 		press_max_mode1
-	 	else
-	 		if(press_max_mode2 < press_max_mode1) then
-	 			press_max_mode2
-	 		endif
-	 	endif
-	 /*Fine lettera A*/
 	 	
-	 function otis_boundaries =
-	 	if current_volume > check_press_max or current_volume < vt_min or rr > check_freq_max or rr < itor(freq_min) then
-	 		false
-	 	else
-	 		true
-	 	endif
-	
-	function breath_triggered = 
-		if(count_dropPAW = 2 and dropPAW_ITS_sup and respirationMode_out = PCV) then
-			true
-		else
-			false
-	 	endif
-	 	
-		macro rule r_led_board($s in Alarm) =	
+	macro rule r_led_board($s in Alarm) =	
 		switch($s)
 			case LOW:
 					led := YELLOW_CONSTANT
@@ -473,16 +374,6 @@ definitions:
 			endpar
 		endif	
 		
-		
-	macro rule r_check_drop =
-			if(dropPAW_ITS_sup and respirationMode_out = PCV) then
-				count_dropPAW := count_dropPAW + 1
-			else
-				if(not(dropPAW_ITS_sup) and respirationMode_out = PCV) then
-					count_dropPAW := 0		
-				endif
-			endif
-		
 	macro rule r_breath_transition =
 		if(not(previous_breath = breath_sync) and not(isUndef(previous_breath))) then
 			par
@@ -499,8 +390,6 @@ definitions:
 				if(breath_sync = INSP) then
 					par	
 						
-						ver_rr := rr //inserita per controllo rr
-						
 						rr_supp := revo(time_insp, calc_t(timer_exp))
 						
 						r_check_peep_max[]	//SUP 26.2
@@ -508,7 +397,7 @@ definitions:
 						
 						r_check_rr_min[]	//SUP.25.3	
 						r_check_rr_max[]	//SUP.25.3
-						r_check_drop[]
+						
 						time_exp:= calc_t(timer_exp)
 						
 						r_reset_timer[timer_insp]	
@@ -516,17 +405,8 @@ definitions:
 						
 						r_check_ie[time_insp, (currentTime(timer_insp) - start(timer_exp))] //SUP.26.5	
 						
-						f_prev := f_resp_target
 						r_check_inc_insp[time_insp,  (currentTime(timer_insp) - start(timer_exp))]
 															 
-						if((respirationMode_sup = PCV and not(otis_boundaries)) or breath_triggered  )then
-								respirationMode_out := ASV
-								//respirationMode_out := ASV
-							else
-								respirationMode_out := respirationMode_sup	
-								//respirationMode_out := respirationMode_sup
-						endif
-							
 					endpar 
 				endif
 			endpar
@@ -550,9 +430,7 @@ definitions:
 			par
 				state := VENTILATIONON
 				watchdog_st := BREATHON	
-				
-				respirationMode_out := respirationMode_sup 
-					
+									
 				r_check_peak_max[] //SUP 26.4
 				r_check_peak_min[] //SUP 26.3
 						
@@ -935,7 +813,6 @@ default init s0:
 	function compliance = 3.0
 	function weight_sup = 70.0
 	function peep = 5.0		 
-	function respirationMode_sup = PSV	 
 	function rcexp = 0.5
 	function vol_min_perc = 100.0
 	function current_volume = 6.0
