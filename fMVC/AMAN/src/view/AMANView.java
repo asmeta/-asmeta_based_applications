@@ -287,11 +287,8 @@ public class AMANView implements AsmetaFMVCView {
 		return airplaneLabels;
 	}
 
-	public static void main(String[] args) throws Exception {
-		AsmetaFMVCModel model = new AsmetaFMVCModel("model/aman2.asm");
-		AMANView view = new AMANView();
-		AMANController controller = new AMANController(model, view);
-		controller.updateAndSimulate(null);
-		view.frame.setVisible(true);
+	public void setVisible(boolean b) {
+		frame.setVisible(true);
 	}
+	
 }
