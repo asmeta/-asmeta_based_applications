@@ -1,6 +1,6 @@
 // ABZ 2023 - fMVC
-
-asm aman0
+// first version of AMAN - with undef when a aiplane is not found
+asm aman0_undef
 
 import StandardLibrary
 import CTLlibrary
@@ -55,22 +55,25 @@ definitions:
 	// return -1 if $a is not found in the landing sequence
 	function search($a in Airplane, $t in TimeSlot) = 
 		if landingSequence($t) = $a then $t else 
-		if $t >= 10 then -1 else 
+		if $t >= 10 then undef else 
 		if $t < 10 then search($a, $t+1) 
-		else -1 endif endif endif
+		else undef endif endif endif
 	
 	function canBeMovedUp($airplane in Airplane) =
 		let ($currentLT = search($airplane, 0)) in
+		// if it is not in the sequence, it cannot be moved
+		if $currentLT = undef then false else
 			if ($currentLT + 1) <= 10 then if not isUndef(landingSequence($currentLT + 1)) then false
 			else if ($currentLT + 2) <= 10 then if not isUndef(landingSequence($currentLT + 2)) then false
 			else if ($currentLT + 3) <= 10 then if not isUndef(landingSequence($currentLT + 3)) then false
 			else if ($currentLT + 4) <= 10 then if not isUndef(landingSequence($currentLT + 4)) then false 
 			else true endif endif endif endif endif endif endif endif
-			endlet 
+		endif endlet 
 		
 	function canBeMovedDown($airplane in Airplane) =
 		let ($currentLT = search($airplane, 0)) in
-			if ($currentLT - 1) >= 0 then
+			if $currentLT = undef then false else
+			if $currentLT  >= 1 then
 			if not isUndef(landingSequence($currentLT - 1)) then false
 				else  
 					if ($currentLT - 2) >= 0 then 
@@ -86,7 +89,8 @@ definitions:
 								endif 
 							else true endif 
 						endif
-					else true endif endif endif
+					else true endif endif endif 
+			endif
 		endlet
 	
 
@@ -94,7 +98,8 @@ definitions:
 	// the PLAN ATCo decides to move up an airplane
 	rule r_moveUp($a in Airplane, $manual in Boolean) =
 		let ($currentLT = search($a, 0)) in
-		if $currentLT != -1 and $currentLT < 10 then
+		if $currentLT != undef then
+		if $currentLT < 10 then
 			let ($blk = blocked($currentLT + 1)) in
 				if $currentLT < zoomValue and not $blk and canBeMovedUp($a) then 
 				par  
@@ -105,13 +110,13 @@ definitions:
 				endpar 
 				endif 
 			endlet
-		endif endlet 
+		endif endif endlet 
 			
 	// the PLAN ATCo decides to move down an airplane
 	rule r_moveDown($a in Airplane, $manual in Boolean) =
 		let ($currentLT = search($a, 0)) in
-		let ($blk = blocked($currentLT - 1)) in
-		if $currentLT != -1 then
+		if $currentLT != undef then
+			let ($blk = blocked($currentLT - 1)) in
 			// The function is called by AMAN -> It is ok to execute without checking anything
 			if ($currentLT <= 0 and not $manual) then
 				par
@@ -132,13 +137,13 @@ definitions:
 					landingSequence($currentLT):= undef
 					landingSequenceColor($currentLT - 1) := landingSequenceColor($currentLT)
 					landingSequenceColor($currentLT) := WHITE
-				endpar endif endif endif endif endlet endlet
+				endpar endif endif endif endlet endif endlet
 						
 	// the PLAN ATCo decides to put an airplane on hold -> The airplane has to be removed 
 	// from the landing sequence and the color of the corresponding cell is set to white
 	rule r_hold($a in Airplane) = 
 		let ($currentLT = search($a, 0)) in
-		if $currentLT != -1 then
+		if $currentLT != undef then
 			par
 				landingSequence($currentLT) := undef
 				landingSequenceColor($currentLT) := WHITE
