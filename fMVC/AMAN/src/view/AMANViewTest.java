@@ -21,7 +21,6 @@ public class AMANViewTest {
 		assertEquals("45", view.lblZoomValue.getText());
 		
 		view.btnHold.doClick();
-		Thread
 	}
 
 }
