@@ -5,7 +5,7 @@ asm aman2
 import StandardLibrary
 import CTLlibrary
 import TimeLibrary
-import aman1
+import aman1_wom
 
 signature:
 	// DOMAINS

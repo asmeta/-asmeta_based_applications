@@ -145,7 +145,7 @@ public class AMANView implements AsmetaFMVCView {
 		frame.getContentPane().add(btnMoveDown);
 
 		// The zoom value
-		lblZoomValue = new JLabel("45");
+		lblZoomValue = new JLabel("30");
 		lblZoomValue.setHorizontalAlignment(SwingConstants.CENTER);
 		lblZoomValue.setBounds(690, 168, 61, 43);
 		lblZoomValue.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
