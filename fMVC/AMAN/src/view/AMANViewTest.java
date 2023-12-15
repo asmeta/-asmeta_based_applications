@@ -19,6 +19,9 @@ public class AMANViewTest {
 		System.out.println(view.airplaneLabels.getModel().getValueAt(18, 0));
 		assertEquals("a3", view.airplaneLabels.getModel().getValueAt(18, 0));
 		assertEquals("45", view.lblZoomValue.getText());
+		
+		view.btnHold.doClick();
+		Thread
 	}
 
 }
