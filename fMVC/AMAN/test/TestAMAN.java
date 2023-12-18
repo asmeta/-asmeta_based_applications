@@ -1,6 +1,8 @@
+import java.util.Arrays;
+
 import org.junit.Test;
 
-import asmeta.fmvc.testrunner.AsmetaFMVCTestRunner;
+import asmeta.fmvclib.testrunner.AsmetaFMVCTestRunner;
 import asmeta.fmvclib.model.AsmetaFMVCModel;
 import controller.AMANController;
 import view.AMANView;
@@ -16,7 +18,7 @@ public class TestAMAN {
 		controller.updateAndSimulate(null);
 		view.setVisible(true);
 		// Create the test runner
-		AsmetaFMVCTestRunner runner = new AsmetaFMVCTestRunner(view, "model/scenario1.avalla");
+		AsmetaFMVCTestRunner runner = new AsmetaFMVCTestRunner(view, "model/scenario3.avalla", Arrays.asList("NONE"));
 		runner.runTest();
 	}
 	
