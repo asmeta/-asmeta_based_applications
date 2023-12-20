@@ -14,8 +14,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import asmeta.fmvclib.annotations.LocationType;
 import asmeta.fmvclib.controller.AsmetaFMVCController;
 import asmeta.fmvclib.model.AsmetaFMVCModel;
+import asmeta.fmvclib.view.XButtonModel;
 import view.AMANView;
-import view.IsLockedModel;
 
 @SuppressWarnings("deprecation")
 public class AMANController extends AsmetaFMVCController {
@@ -102,7 +102,7 @@ public class AMANController extends AsmetaFMVCController {
 		m_model.computeValue("blocked", LocationType.INTEGER);
 		List<Entry<String, String>> value = m_model.getValue("blocked");
 		JTable table = ((AMANView) this.m_view).getIsLocked();
-		IsLockedModel model = (IsLockedModel) table.getModel();
+		XButtonModel model = (XButtonModel) table.getModel();
 
 		// Iterate over the results
 		int counter = 0;

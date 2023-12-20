@@ -25,6 +25,7 @@ import asmeta.fmvclib.annotations.AsmetaMonitoredLocation;
 import asmeta.fmvclib.annotations.AsmetaRunStep;
 import asmeta.fmvclib.controller.ButtonColumn;
 import asmeta.fmvclib.view.AsmetaFMVCView;
+import asmeta.fmvclib.view.XButtonModel;
 
 public class AMANView implements AsmetaFMVCView {
 
@@ -82,7 +83,7 @@ public class AMANView implements AsmetaFMVCView {
 	@AsmetaMonitoredLocation(asmLocationName = "timeToLock")
 	@AsmetaRunStep
 	ButtonColumn isLockedColumn;
-	IsLockedModel isLockedModel;
+	XButtonModel isLockedModel;
 	JTable isLocked;
 
 	public AMANView() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
@@ -151,7 +152,7 @@ public class AMANView implements AsmetaFMVCView {
 		frame.getContentPane().add(lblZoomValue);
 
 		// The table with the components locking the time instant
-		isLockedModel = new IsLockedModel(Integer.parseInt(lblZoomValue.getText()));
+		isLockedModel = new XButtonModel(Integer.parseInt(lblZoomValue.getText()));
 		isLocked = new JTable(Integer.parseInt(lblZoomValue.getText()), 1);
 		isLocked.setModel(isLockedModel);
 		TableColumnModel columnModelLocked = isLocked.getColumnModel();
@@ -277,7 +278,7 @@ public class AMANView implements AsmetaFMVCView {
 		return isLocked;
 	}
 
-	public IsLockedModel getIsLockedModel() {
+	public XButtonModel getIsLockedModel() {
 		return isLockedModel;
 	}
 
