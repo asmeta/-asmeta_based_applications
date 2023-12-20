@@ -38,7 +38,7 @@ public class AMANController extends AsmetaFMVCController {
 		// Case-study-specific elements can be handled by accessing this.updateSetMap
 		// --------------------------------------------------------------------------------------------
 		// Set the text on buttons based on the value in the TableModel
-		updateBlockedStatus();
+		updateButtonColumnStatus("blocked", ((AMANView) this.m_view).getIsLocked());
 
 		// Set the color of cells
 		setAirplaneLabelColors();
@@ -78,49 +78,19 @@ public class AMANController extends AsmetaFMVCController {
 						column);
 				try {
 					if (colors.get(row).equals("WHITE") && table.getValueAt(row, column).equals("")) {
-						((JComponent)c).setOpaque(false);
+						((JComponent) c).setOpaque(false);
 					} else {
 						c.setBackground((Color) (Color.class.getField(colors.get(row))).get(null));
-						((JComponent)c).setOpaque(true);
+						((JComponent) c).setOpaque(true);
 					}
-				} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException
-						| SecurityException | IndexOutOfBoundsException e) {
-					((JComponent)c).setOpaque(false);
+				} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
+						| IndexOutOfBoundsException e) {
+					((JComponent) c).setOpaque(false);
 				}
 				return c;
 			}
 		});
-		
-		table.repaint();
-	}
 
-	/**
-	 * Updates the blocked status by using an X on the time instants which are
-	 * locked
-	 */
-	public void updateBlockedStatus() {
-		m_model.computeValue("blocked", LocationType.INTEGER);
-		List<Entry<String, String>> value = m_model.getValue("blocked");
-		JTable table = ((AMANView) this.m_view).getIsLocked();
-		XButtonModel model = (XButtonModel) table.getModel();
-
-		// Iterate over the results
-		int counter = 0;
-		for (Entry<String, String> assignment : value) {
-			if (counter < ((AMANView) this.m_view).getIsLockedModel().getRowCount()) {
-				if (!assignment.getValue().equals("undef")) {
-					if (assignment.getValue().toLowerCase().equals("true")
-							&& model.getValueAt(Integer.parseInt(assignment.getKey().split("_")[1]), 0).equals(""))
-						model.updateValue(Integer.parseInt(assignment.getKey().split("_")[1]));
-					else if (assignment.getValue().toLowerCase().equals("false")
-							&& model.getValueAt(Integer.parseInt(assignment.getKey().split("_")[1]), 0).equals("X"))
-						model.updateValue(Integer.parseInt(assignment.getKey().split("_")[1]));
-				}
-
-				counter++;
-
-			}
-		}
 		table.repaint();
 	}
 
