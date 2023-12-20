@@ -18,7 +18,7 @@ public class TestAMAN {
 		controller.updateAndSimulate(null);
 		view.setVisible(true);
 		// Create the test runner
-		AsmetaFMVCTestRunner runner = new AsmetaFMVCTestRunner(view, "model/scenario3.avalla", Arrays.asList("NONE"));
+		AsmetaFMVCTestRunner runner = new AsmetaFMVCTestRunner(view, controller, "model/scenario3.avalla", Arrays.asList("NONE"));
 		runner.runTest();
 	}
 	

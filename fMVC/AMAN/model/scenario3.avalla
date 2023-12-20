@@ -1,19 +1,21 @@
 //// starting scenario
 scenario scenario3
 load aman2.asm
-set zoom := 15;
 check landingSequence(2) = a2;
 check landingSequence(5) = a1;
 set action := NONE;
 step
 check landingSequence(2) = a2;
 check landingSequence(5) = a1;
-check zoomValue = 15;
+check zoomValue = 45;
 set zoom := 15;
-set selectedAirplane := a1;
+set action := NONE;
+step
+check zoomValue = 15;
+set selectedAirplane := a2;
 set action := DOWN;
 step
-check landingSequence(5) = undef;
-check landingSequence(2) = a2;
-check landingSequence(6) = a1;
+check landingSequence(5) = a1;
+check landingSequence(2) = undef;
+check landingSequence(1) = a2;
 step
