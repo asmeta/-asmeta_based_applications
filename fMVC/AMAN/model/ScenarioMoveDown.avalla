@@ -1,0 +1,23 @@
+//// This scenario is composed of several steps
+//// Initially, no change is done in the first step
+//// In the second step, only the zoom level is changed
+//// Lastly, the airpline a2 is moved down
+scenario ScenarioMoveDown
+load aman2.asm
+check landingSequence(2) = a2;
+check landingSequence(5) = a1;
+set action := NONE;
+step
+check landingSequence(2) = a2;
+check landingSequence(5) = a1;
+check zoomValue = 45;
+set zoom := 15;
+set action := NONE;
+step
+check zoomValue = 15;
+set selectedAirplane := a2;
+set action := DOWN;
+step
+check landingSequence(5) = a1;
+check landingSequence(2) = undef;
+check landingSequence(1) = a2;

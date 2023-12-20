@@ -1,18 +1,21 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -21,12 +24,8 @@ import asmeta.fmvclib.annotations.AsmetaControlledLocation;
 import asmeta.fmvclib.annotations.AsmetaMonitoredLocation;
 import asmeta.fmvclib.annotations.AsmetaRunStep;
 import asmeta.fmvclib.controller.ButtonColumn;
-import asmeta.fmvclib.model.AsmetaFMVCModel;
 import asmeta.fmvclib.view.AsmetaFMVCView;
-import controller.AMANController;
-import javax.swing.JSpinner;
-import java.awt.Font;
-import javax.swing.border.LineBorder;
+import asmeta.fmvclib.view.XButtonModel;
 
 public class AMANView implements AsmetaFMVCView {
 
@@ -84,7 +83,7 @@ public class AMANView implements AsmetaFMVCView {
 	@AsmetaMonitoredLocation(asmLocationName = "timeToLock")
 	@AsmetaRunStep
 	ButtonColumn isLockedColumn;
-	IsLockedModel isLockedModel;
+	XButtonModel isLockedModel;
 	JTable isLocked;
 
 	public AMANView() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
@@ -145,7 +144,7 @@ public class AMANView implements AsmetaFMVCView {
 		frame.getContentPane().add(btnMoveDown);
 
 		// The zoom value
-		lblZoomValue = new JLabel("45");
+		lblZoomValue = new JLabel("30");
 		lblZoomValue.setHorizontalAlignment(SwingConstants.CENTER);
 		lblZoomValue.setBounds(690, 168, 61, 43);
 		lblZoomValue.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
@@ -153,7 +152,7 @@ public class AMANView implements AsmetaFMVCView {
 		frame.getContentPane().add(lblZoomValue);
 
 		// The table with the components locking the time instant
-		isLockedModel = new IsLockedModel(Integer.parseInt(lblZoomValue.getText()));
+		isLockedModel = new XButtonModel(Integer.parseInt(lblZoomValue.getText()));
 		isLocked = new JTable(Integer.parseInt(lblZoomValue.getText()), 1);
 		isLocked.setModel(isLockedModel);
 		TableColumnModel columnModelLocked = isLocked.getColumnModel();
@@ -279,7 +278,7 @@ public class AMANView implements AsmetaFMVCView {
 		return isLocked;
 	}
 
-	public IsLockedModel getIsLockedModel() {
+	public XButtonModel getIsLockedModel() {
 		return isLockedModel;
 	}
 
