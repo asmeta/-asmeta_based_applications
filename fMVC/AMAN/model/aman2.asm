@@ -62,8 +62,8 @@ definitions:
 	main rule r_Main =
 		par		
 			// Update GUI
-			r_update_lock[]
-			r_update_zoom[]
+			if not isUndef(timeToLock) then r_update_lock[] endif
+			if not isUndef(zoom) then r_update_zoom[] endif
 			r_update_time[]
 			r_update_time_shown[]
 			

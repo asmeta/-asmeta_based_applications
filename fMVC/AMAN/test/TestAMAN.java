@@ -1,16 +1,30 @@
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.asmeta.atgt.generator2.AsmTGBySimulationOnAction;
+import org.asmeta.atgt.generator2.AsmTestGeneratorBySimulation;
+import org.asmeta.parser.ASMParser;
+import org.asmeta.simulator.Environment;
+import org.asmeta.simulator.Environment.TimeMngt;
 import org.junit.Test;
 
 import asmeta.fmvclib.testrunner.AsmetaFMVCTestRunner;
+import atgt.coverage.AsmTestSequence;
+import atgt.coverage.AsmTestSuite;
+import atgt.testseqexport.toAvalla;
+import asmeta.AsmCollection;
 import asmeta.fmvclib.model.AsmetaFMVCModel;
 import controller.AMANController;
 import view.AMANView;
 
 public class TestAMAN {
+
+	private static final String MODEL_AMAN = "model/aman2.asm";
 
 	@Test
 	public void testAMAN_MoveDown() throws Exception {
@@ -31,11 +45,27 @@ public class TestAMAN {
 	public void testAMAN_LOCK() throws Exception {
 		runTestScenario("model/ScenarioLOCK.avalla");
 	}
+	
+	@Test
+	public void testGenerateAndRun() throws Exception {		
+		Environment.timeMngt = TimeMngt.auto_increment;
+		AsmCollection asm = ASMParser.setUpReadAsm(new File(MODEL_AMAN));
+		List<String> stepActions = Arrays.asList("action","zoom","timeToLock");
+		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm,7,5, stepActions);
+		AsmTestSuite tests = atgt.getTestSuite();
+		int counter = 0;
+		for (AsmTestSequence test : tests.getTests()) {
+			toAvalla export =  new toAvalla(new FileOutputStream(new File("temp/test" + counter + ".avalla")),test, MODEL_AMAN, "test" + counter);
+			export.saveToStream();
+			runTestScenario("temp/test" + counter + ".avalla");
+			counter++;
+		}
+	}
 
 	public void runTestScenario(String scenario) throws Exception, ClassNotFoundException, InstantiationException,
 			IllegalAccessException, UnsupportedLookAndFeelException, IOException, InterruptedException {
 		// Define the model
-		AsmetaFMVCModel model = new AsmetaFMVCModel("model/aman2.asm");
+		AsmetaFMVCModel model = new AsmetaFMVCModel(MODEL_AMAN);
 		AMANView view = new AMANView();
 		AMANController controller = new AMANController(model, view);
 		controller.updateAndSimulate(null);
