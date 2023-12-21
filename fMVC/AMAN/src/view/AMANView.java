@@ -102,7 +102,7 @@ public class AMANView implements AsmetaFMVCView {
 		zoom = new JSlider();
 		zoom.setSnapToTicks(true);
 		zoom.setMajorTickSpacing(5);
-		zoom.setValue(45);
+		zoom.setValue(30);
 		zoom.setMinorTickSpacing(5);
 		zoom.setMaximum(45);
 		zoom.setMinimum(15);
