@@ -51,7 +51,7 @@ public class TestAMAN {
 		Environment.timeMngt = TimeMngt.auto_increment;
 		AsmCollection asm = ASMParser.setUpReadAsm(new File(MODEL_AMAN));
 		List<String> stepActions = Arrays.asList("action","zoom","timeToLock");
-		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm,7,5, stepActions);
+		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm,5,2, stepActions);
 		AsmTestSuite tests = atgt.getTestSuite();
 		int counter = 0;
 		for (AsmTestSequence test : tests.getTests()) {
@@ -69,6 +69,7 @@ public class TestAMAN {
 		AMANView view = new AMANView();
 		AMANController controller = new AMANController(model, view);
 		controller.updateAndSimulate(null);
+		view.getTimer().stop();
 		view.setVisible(true);
 		// Create the test runner
 		AsmetaFMVCTestRunner runner = new AsmetaFMVCTestRunner(view, controller, scenario, Arrays.asList("NONE"), 500);

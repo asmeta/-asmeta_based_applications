@@ -291,4 +291,8 @@ public class AMANView implements AsmetaFMVCView {
 		frame.setVisible(true);
 	}
 	
+	public Timer getTimer() {
+		return this.guiTimer;
+	}
+	
 }
