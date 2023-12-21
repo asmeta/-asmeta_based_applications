@@ -10,6 +10,10 @@ set timeToLock := 1;
 step
 check blocked(1) = true;
 check blocked(0) = false;
+set timeToLock := 0;
+step
+check blocked(1) = true;
+check blocked(0) = true;
 set selectedAirplane := a2;
 set action := DOWN;
 step

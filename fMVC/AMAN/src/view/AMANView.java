@@ -81,6 +81,7 @@ public class AMANView implements AsmetaFMVCView {
 
 	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "NONE")
 	@AsmetaMonitoredLocation(asmLocationName = "timeToLock")
+	@AsmetaControlledLocation(asmLocationName = "blocked")
 	@AsmetaRunStep
 	ButtonColumn isLockedColumn;
 	XButtonModel isLockedModel;

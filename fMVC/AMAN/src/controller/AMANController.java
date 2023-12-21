@@ -14,7 +14,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import asmeta.fmvclib.annotations.LocationType;
 import asmeta.fmvclib.controller.AsmetaFMVCController;
 import asmeta.fmvclib.model.AsmetaFMVCModel;
-import asmeta.fmvclib.view.XButtonModel;
 import view.AMANView;
 
 @SuppressWarnings("deprecation")
