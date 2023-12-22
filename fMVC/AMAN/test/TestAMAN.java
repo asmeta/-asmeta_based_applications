@@ -16,6 +16,7 @@ import org.junit.Test;
 import asmeta.fmvclib.testrunner.AsmetaFMVCTestRunner;
 import atgt.coverage.AsmTestSequence;
 import atgt.coverage.AsmTestSuite;
+import atgt.testseqexport.ToAvallaLastAction;
 import atgt.testseqexport.toAvalla;
 import asmeta.AsmCollection;
 import asmeta.fmvclib.model.AsmetaFMVCModel;
@@ -66,7 +67,7 @@ public class TestAMAN {
 		AsmTestSuite tests = atgt.getTestSuite();
 		int counter = 0;
 		for (AsmTestSequence test : tests.getTests()) {
-			toAvalla export =  new toAvalla(new FileOutputStream(new File("temp/test" + counter + ".avalla")),test, MODEL_AMAN, "test" + counter);
+			ToAvallaLastAction export =  new ToAvallaLastAction(new FileOutputStream(new File("temp/test" + counter + ".avalla")),test, MODEL_AMAN, "test" + counter, stepActions);
 			export.saveToStream();
 			runTestScenario("temp/test" + counter + ".avalla");
 			counter++;
