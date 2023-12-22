@@ -24,6 +24,7 @@ import view.AMANView;
 
 public class TestAMAN {
 
+	private static final int STEP = 50;
 	private static final String MODEL_AMAN = "model/aman2.asm";
 
 	@Test
@@ -44,6 +45,16 @@ public class TestAMAN {
 	@Test
 	public void testAMAN_LOCK() throws Exception {
 		runTestScenario("model/ScenarioLOCK.avalla");
+	}
+	
+	@Test
+	public void test0() throws Exception {
+		runTestScenario("model/test0.avalla");
+	}
+	
+	@Test
+	public void test1() throws Exception {
+		runTestScenario("model/test1.avalla");
 	}
 	
 	@Test
@@ -72,7 +83,7 @@ public class TestAMAN {
 		view.getTimer().stop();
 		view.setVisible(true);
 		// Create the test runner
-		AsmetaFMVCTestRunner runner = new AsmetaFMVCTestRunner(view, controller, scenario, Arrays.asList("NONE"), 500);
+		AsmetaFMVCTestRunner runner = new AsmetaFMVCTestRunner(view, controller, scenario, Arrays.asList("NONE"), STEP);
 		runner.runTest();
 	}
 }
