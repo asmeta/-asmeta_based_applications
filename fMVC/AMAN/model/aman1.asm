@@ -110,7 +110,7 @@ definitions:
 	// the PLAN ATCo decides to move up an airplane
 	rule r_moveUp($a in Airplane, $manual in Boolean, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($a)) in
-		if ($currentLT != undef) then
+		if ($currentLT != undef and $nMov != undef) then
 			if $currentLT < zoomValue and not blocked($currentLT + $nMov) and canBeMovedUp($a, $nMov) then 
 			par  
 				landingSequence($currentLT + $nMov):= $a
@@ -124,7 +124,7 @@ definitions:
 	// the PLAN ATCo decides to move down an airplane
 	rule r_moveDown($a in Airplane, $manual in Boolean, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($a)) in
-		if ($currentLT != undef) then
+		if ($currentLT != undef and $nMov != undef) then
 			// The function is called by AMAN -> It is ok to execute without checking anything
 			if ($currentLT <= 0 and not $manual) then
 				par
@@ -139,7 +139,7 @@ definitions:
 					landingSequenceColor($currentLT - $nMov) := landingSequenceColor($currentLT)
 					landingSequenceColor($currentLT) := WHITE
 				endpar				
-				else if $currentLT > 0 and not blocked($currentLT - $nMov)  and canBeMovedDown($a, $nMov) then 
+				else if $currentLT > 0 and not blocked($currentLT - $nMov) and canBeMovedDown($a, $nMov) then 
 				par  
 					landingSequence($currentLT - $nMov):= $a
 					landingSequence($currentLT):= undef
