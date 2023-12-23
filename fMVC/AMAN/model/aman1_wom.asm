@@ -111,8 +111,8 @@ definitions:
 	// the PLAN ATCo decides to move up an airplane
 	rule r_moveUp($a in Airplane, $manual in Boolean, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($a)) in
-		if ($currentLT != undef) then
-			if $currentLT < zoomValue and not blocked($currentLT + $nMov) and canBeMovedUp($a, $nMov) then 
+		if ($currentLT != undef and $nMov != undef) then
+			if $currentLT < zoomValue and $currentLT + $nMov <= 45 and not blocked($currentLT + $nMov) and canBeMovedUp($a, $nMov) then 
 			par  
 				landingSequence($currentLT + $nMov):= $a
 				landingSequence($currentLT):= undef
@@ -140,7 +140,7 @@ definitions:
 					landingSequenceColor($currentLT - $nMov) := landingSequenceColor($currentLT)
 					landingSequenceColor($currentLT) := WHITE
 				endpar				
-				else if $currentLT > 0 and not blocked($currentLT - $nMov) and canBeMovedDown($a, $nMov) then 
+				else if ($currentLT-$nMov) >= 0 and $currentLT > 0 and not blocked($currentLT - $nMov) and canBeMovedDown($a, $nMov) then 
 				par  
 					landingSequence($currentLT - $nMov):= $a
 					landingSequence($currentLT):= undef

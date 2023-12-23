@@ -26,7 +26,7 @@ import view.AMANView;
 
 public class TestAMAN {
 
-	private static final int STEP = 50;
+	private static final int STEP = 500;
 	private static final String MODEL_AMAN = "model/aman2.asm";
 
 	@Test
@@ -64,11 +64,11 @@ public class TestAMAN {
 		Environment.timeMngt = TimeMngt.auto_increment;
 		AsmCollection asm = ASMParser.setUpReadAsm(new File(MODEL_AMAN));
 		List<String> stepActions = Arrays.asList("action","zoom","timeToLock");
-		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm,5,10, stepActions);
+		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm, 5, 10, stepActions);
 		AsmTestSuite tests = atgt.getTestSuite();
 		int counter = 0;
 		for (AsmTestSequence test : tests.getTests()) {
-			UnchangedRemover.conRemover.optimize(test);
+			UnchangedRemover.monRemover.optimize(test);
 			ToAvallaLastAction export =  new ToAvallaLastAction(new FileOutputStream(new File("temp/test" + counter + ".avalla")),test, MODEL_AMAN, "test" + counter, stepActions);
 			export.saveToStream();
 			runTestScenario("temp/test" + counter + ".avalla");
