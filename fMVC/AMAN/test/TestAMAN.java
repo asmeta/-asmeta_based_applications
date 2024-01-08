@@ -16,6 +16,7 @@ import org.asmeta.parser.ASMParser;
 import org.asmeta.simulator.Environment;
 import org.asmeta.simulator.TermEvaluator;
 import org.asmeta.simulator.Environment.TimeMngt;
+import org.asmeta.simulator.State;
 import org.junit.Test;
 
 import asmeta.fmvclib.testrunner.AsmetaFMVCTestRunner;
@@ -66,6 +67,7 @@ public class TestAMAN {
 	@Test
 	public void testGenerateAndRun() throws Exception {
 		Logger.getLogger(TermEvaluator.class).setLevel(Level.DEBUG);
+		Logger.getLogger(State.class).setLevel(Level.DEBUG);
 		Environment.timeMngt = TimeMngt.auto_increment;
 		AsmCollection asm = ASMParser.setUpReadAsm(new File(MODEL_AMAN));
 		List<String> stepActions = Arrays.asList("action","zoom","timeToLock");
@@ -76,7 +78,8 @@ public class TestAMAN {
 			UnchangedRemover.monRemover.optimize(test);
 			UnecessaryChangesRemover opt2 = new UnecessaryChangesRemover(asm);
 			opt2.optimize(test);
-			ToAvallaLastAction export =  new ToAvallaLastAction(new FileOutputStream(new File("temp/test" + counter + ".avalla")),test, MODEL_AMAN, "test" + counter, stepActions);
+			File file = new File("temp/test" + counter + ".avalla");
+			ToAvallaLastAction export =  new ToAvallaLastAction(new FileOutputStream(file),test, MODEL_AMAN, "test" + counter, stepActions);
 			export.saveToStream();
 			runTestScenario("temp/test" + counter + ".avalla");
 			counter++;
