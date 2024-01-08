@@ -6,12 +6,15 @@ import java.util.List;
 
 import javax.swing.UnsupportedLookAndFeelException;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.asmeta.atgt.generator2.AsmTGBySimulationOnAction;
 import org.asmeta.atgt.generator2.AsmTestGeneratorBySimulation;
 import org.asmeta.atgt.testoptimizer.UnchangedRemover;
 import org.asmeta.atgt.testoptimizer.UnecessaryChangesRemover;
 import org.asmeta.parser.ASMParser;
 import org.asmeta.simulator.Environment;
+import org.asmeta.simulator.TermEvaluator;
 import org.asmeta.simulator.Environment.TimeMngt;
 import org.junit.Test;
 
@@ -61,7 +64,8 @@ public class TestAMAN {
 	}
 	
 	@Test
-	public void testGenerateAndRun() throws Exception {		
+	public void testGenerateAndRun() throws Exception {
+		Logger.getLogger(TermEvaluator.class).setLevel(Level.DEBUG);
 		Environment.timeMngt = TimeMngt.auto_increment;
 		AsmCollection asm = ASMParser.setUpReadAsm(new File(MODEL_AMAN));
 		List<String> stepActions = Arrays.asList("action","zoom","timeToLock");
@@ -69,9 +73,9 @@ public class TestAMAN {
 		AsmTestSuite tests = atgt.getTestSuite();
 		int counter = 0;
 		for (AsmTestSequence test : tests.getTests()) {
-			UnchangedRemover.monRemover.optimize(test);
-			UnecessaryChangesRemover opt2 = new UnecessaryChangesRemover(asm);
-			opt2.optimize(test);
+			//UnchangedRemover.monRemover.optimize(test);
+			//UnecessaryChangesRemover opt2 = new UnecessaryChangesRemover(asm);
+			//opt2.optimize(test);
 			ToAvallaLastAction export =  new ToAvallaLastAction(new FileOutputStream(new File("temp/test" + counter + ".avalla")),test, MODEL_AMAN, "test" + counter, stepActions);
 			export.saveToStream();
 			runTestScenario("temp/test" + counter + ".avalla");

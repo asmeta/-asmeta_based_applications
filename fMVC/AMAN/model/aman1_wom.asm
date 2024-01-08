@@ -78,32 +78,36 @@ definitions:
 	
 	function canBeMovedUp($airplane in Airplane, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($airplane)) in
-			if ($currentLT + $nMov) <= 45 then if (landingSequence($currentLT + $nMov) != undef) then false
-			else if ($currentLT + $nMov + 1) <= 45 then if (landingSequence($currentLT + $nMov + 1) != undef) then false
-			else if ($currentLT + $nMov + 2) <= 45 then if (landingSequence($currentLT + $nMov + 2) != undef) then false
-			else if ($currentLT + $nMov + 3) <= 45 then if (landingSequence($currentLT + $nMov + 3) != undef) then false 
-			else true endif endif endif endif endif endif endif endif
-			endlet
+			if ($currentLT != undef) then
+				if ($currentLT + $nMov) <= 45 then if (landingSequence($currentLT + $nMov) != undef) then false
+				else if ($currentLT + $nMov + 1) <= 45 then if (landingSequence($currentLT + $nMov + 1) != undef) then false
+				else if ($currentLT + $nMov + 2) <= 45 then if (landingSequence($currentLT + $nMov + 2) != undef) then false
+				else if ($currentLT + $nMov + 3) <= 45 then if (landingSequence($currentLT + $nMov + 3) != undef) then false 
+				else true endif endif endif endif endif endif endif endif
+			else false endif
+		endlet
 		
 	function canBeMovedDown($airplane in Airplane, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($airplane)) in
-			if ($currentLT - $nMov) >= 0 then
-			if (landingSequence($currentLT - $nMov) != undef) then false
-				else  
-					if ($currentLT - $nMov - 1) >= 0 then 
-						if (landingSequence($currentLT - $nMov - 1) != undef) then false
-						else 
-							if ($currentLT - $nMov - 2) >= 0 then 
-								if (landingSequence($currentLT - $nMov - 2) != undef) then false
-								else 
-									if ($currentLT - $nMov - 3) >= 0 then 
-										if (landingSequence($currentLT - $nMov - 3) != undef) then false 
+			if ($currentLT != undef) then
+				if ($currentLT - $nMov) >= 0 then
+				if (landingSequence($currentLT - $nMov) != undef) then false
+					else  
+						if ($currentLT - $nMov - 1) >= 0 then 
+							if (landingSequence($currentLT - $nMov - 1) != undef) then false
+							else 
+								if ($currentLT - $nMov - 2) >= 0 then 
+									if (landingSequence($currentLT - $nMov - 2) != undef) then false
+									else 
+										if ($currentLT - $nMov - 3) >= 0 then 
+											if (landingSequence($currentLT - $nMov - 3) != undef) then false 
+											else true endif 
 										else true endif 
-									else true endif 
-								endif 
-							else true endif 
-						endif
-					else true endif endif endif
+									endif 
+								else true endif 
+							endif
+						else true endif endif endif
+			else false endif
 		endlet
 	
 
@@ -111,7 +115,7 @@ definitions:
 	// the PLAN ATCo decides to move up an airplane
 	rule r_moveUp($a in Airplane, $manual in Boolean, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($a)) in
-		if ($currentLT != undef and $nMov != undef) then
+		if ($currentLT != undef and $nMov != undef and canBeMovedUp($a, $nMov) != undef) then
 			if $currentLT < zoomValue and $currentLT + $nMov <= 45 and not blocked($currentLT + $nMov) and canBeMovedUp($a, $nMov) then 
 			par  
 				landingSequence($currentLT + $nMov):= $a
@@ -125,7 +129,7 @@ definitions:
 	// the PLAN ATCo decides to move down an airplane
 	rule r_moveDown($a in Airplane, $manual in Boolean, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($a)) in
-		if ($currentLT != undef and $nMov != undef) then
+		if ($currentLT != undef and $nMov != undef and canBeMovedDown($a, $nMov) != undef) then
 			// The function is called by AMAN -> It is ok to execute without checking anything
 			if ($currentLT <= 0 and not $manual) then
 				par
