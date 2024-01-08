@@ -172,7 +172,7 @@ definitions:
 		
 	// Update the locks depending on user input
 	rule r_update_lock =
-		if timeToLock != undef then
+		if not isUndef(timeToLock) then
 			if landingSequence(timeToLock) = undef then blocked(timeToLock) := not (blocked(timeToLock)) endif endif
 		
 			     
