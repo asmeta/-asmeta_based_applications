@@ -9,6 +9,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.asmeta.atgt.generator2.AsmTGBySimulationOnAction;
 import org.asmeta.atgt.generator2.AsmTestGeneratorBySimulation;
 import org.asmeta.atgt.testoptimizer.UnchangedRemover;
+import org.asmeta.atgt.testoptimizer.UnecessaryChangesRemover;
 import org.asmeta.parser.ASMParser;
 import org.asmeta.simulator.Environment;
 import org.asmeta.simulator.Environment.TimeMngt;
@@ -64,11 +65,13 @@ public class TestAMAN {
 		Environment.timeMngt = TimeMngt.auto_increment;
 		AsmCollection asm = ASMParser.setUpReadAsm(new File(MODEL_AMAN));
 		List<String> stepActions = Arrays.asList("action","zoom","timeToLock");
-		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm, 5, 10, stepActions);
+		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm, 3, 5, stepActions);
 		AsmTestSuite tests = atgt.getTestSuite();
 		int counter = 0;
 		for (AsmTestSequence test : tests.getTests()) {
 			UnchangedRemover.monRemover.optimize(test);
+			UnecessaryChangesRemover opt2 = new UnecessaryChangesRemover(asm);
+			opt2.optimize(test);
 			ToAvallaLastAction export =  new ToAvallaLastAction(new FileOutputStream(new File("temp/test" + counter + ".avalla")),test, MODEL_AMAN, "test" + counter, stepActions);
 			export.saveToStream();
 			runTestScenario("temp/test" + counter + ".avalla");
