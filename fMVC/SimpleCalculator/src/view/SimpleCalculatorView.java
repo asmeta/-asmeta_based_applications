@@ -14,38 +14,68 @@ import asmeta.fmvclib.view.AsmetaFMVCView;
 // controllare le modifiche sul model e venir notificati ad ogni modifica
 // del model
 @SuppressWarnings("serial")
-public class CalcView extends JFrame implements AsmetaFMVCView {
+public class SimpleCalculatorView extends JFrame implements AsmetaFMVCView {
     // Campi della view
 	@AsmetaMonitoredLocation(asmLocationName="number")
-    private JTextField m_userInputTf = new JTextField(5);
+    private JTextField number = new JTextField(5);
+
+	@AsmetaControlledLocation(asmLocationName="mem")
+    private JTextField memory = new JTextField(5);
+
 	
 	@AsmetaControlledLocation(asmLocationName="calc_result")
-    private JTextField m_totalTf     = new JTextField(20);
+    private JTextField calcresult     = new JTextField(20);
 	
-    @AsmetaMonitoredLocation(asmLocationName="operation", asmLocationValue = "MULT")
+    @AsmetaMonitoredLocation(asmLocationName="math_action", asmLocationValue = "INC")
     @AsmetaRunStep
-    private JButton    m_multiplyBtn = new JButton("Multiply");
+    private JButton    m_INCBtn = new JButton("INC");
+    
+    @AsmetaMonitoredLocation(asmLocationName="math_action", asmLocationValue = "DEC")
+    @AsmetaRunStep
+    private JButton    m_DECBtn = new JButton("DEC");
+
+    @AsmetaMonitoredLocation(asmLocationName="mem_action", asmLocationValue = "MPLUS")
+    @AsmetaRunStep
+    private JButton    mPlusBtn = new JButton("M+");
+    
+    @AsmetaMonitoredLocation(asmLocationName="mem_action", asmLocationValue = "MRESET")
+    @AsmetaRunStep
+    private JButton    mResetBtn = new JButton("M reset");
+
+    
     
     // Costruttore
-    public CalcView() {
+    public SimpleCalculatorView() {
     	// Il model implementa Observable, aggiungo al modello un Observer 
     	// (la view stessa)
     	//m_model.addObserver(this);
     	
     	// Inizio a configurare la vista
-        m_totalTf.setEditable(false);
+    	calcresult.setEditable(false);
         
         // Layout dei componenti  
-        JPanel content = new JPanel();
-        content.setLayout(new FlowLayout());
-        content.add(new JLabel("Input"));
-        content.add(m_userInputTf);
-        content.add(m_multiplyBtn);
-        content.add(new JLabel("Total"));
-        content.add(m_totalTf);
+        JPanel mathPanel = new JPanel();
+        mathPanel.setLayout(new FlowLayout());
+        mathPanel.add(new JLabel("Input"));
+        mathPanel.add(number);
+        mathPanel.add(m_INCBtn);
+        mathPanel.add(m_DECBtn);
+        mathPanel.add(new JLabel("Total"));
+        mathPanel.add(calcresult);
         
+        JPanel memoryPanel = new JPanel();
+        memoryPanel.setLayout(new FlowLayout());
+        memoryPanel.add(mPlusBtn);
+        memoryPanel.add(mResetBtn);
+        memoryPanel.add(new JLabel("Memory"));
+        memoryPanel.add(memory);
+        
+        JPanel allPanel = new JPanel();
+        allPanel.setLayout(new BoxLayout(allPanel, BoxLayout.Y_AXIS));
+        allPanel.add(mathPanel);
+        allPanel.add(memoryPanel);
         // Creo il contenitore...
-        this.setContentPane(content);
+        this.setContentPane(allPanel);
         this.pack();
         // Imposto il titolo alla view
         this.setTitle("Simple Calc - MVC");
@@ -64,7 +94,7 @@ public class CalcView extends JFrame implements AsmetaFMVCView {
     // Getter per rendere disponibile all'esterno il valore del campo 
     // testo del textField
     public String getUserInput() {
-        return m_userInputTf.getText();
+        return number.getText();
     }    
     
     // Rende disponibile all'esterno l'eventuale testo del messaggio di errore 
@@ -73,7 +103,7 @@ public class CalcView extends JFrame implements AsmetaFMVCView {
     }
     
     public JTextField getmTotalTf() {
-    	return this.m_totalTf;
+    	return this.calcresult;
     }
 
 	@Override

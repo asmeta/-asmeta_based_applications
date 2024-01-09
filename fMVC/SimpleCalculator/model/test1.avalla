@@ -1,0 +1,27 @@
+// starting scenario
+scenario test1
+load SimpleCalculator.asm
+// Increment the result
+set math_action := INC;
+set mem_action := undef;
+set number := 5;
+step
+check calc_result = 5;
+// decrement
+set math_action := DEC;
+set mem_action := undef;
+set number := 2;
+step
+check calc_result = 3;
+// store result in memory
+set math_action := undef;
+set mem_action := MPLUS;
+step
+check mem = 3;
+// reset the memory
+set math_action := undef;
+set mem_action := MRESET;
+step
+check mem = undef;
+
+
