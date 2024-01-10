@@ -30,7 +30,7 @@ import view.SimpleCalculatorView;
 public class TestSimpleCalculator {
 
 	public static final String MODEL = "model/SimpleCalculator.asm";
-	public static final int STEP = 200;
+	public static final int STEP = 50;
 	
 	@Test
 	public void testGenerateAndRun() throws Exception {
@@ -41,7 +41,6 @@ public class TestSimpleCalculator {
 		AsmTestSuite tests = atgt.getTestSuite();
 		int counter = 0;
 		for (AsmTestSequence test : tests.getTests()) {
-			UnchangedRemover.monRemover.optimize(test);
 			UnecessaryChangesRemover opt2 = new UnecessaryChangesRemover(asm);
 			opt2.optimize(test);
 			File file = new File("temp/test" + counter + ".avalla");

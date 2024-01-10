@@ -1,0 +1,58 @@
+scenario test6
+
+load ./model/SimpleCalculator.asm
+
+//// test name test@test6
+//// generated for (test goal): test6: NULL
+check calc_result = 0;
+set number := 962619845;
+set mem_action := undef;
+set math_action := INC;
+step
+check calc_result = 962619845;
+set number := 1044151754;
+set mem_action := undef;
+set math_action := INC;
+step
+check calc_result = 2006771599;
+set mem_action := undef;
+set number := -1736169234;
+set math_action := DEC;
+step
+check calc_result = 3742940833;
+set number := 1406462242;
+set mem_action := undef;
+set math_action := INC;
+step
+check calc_result = 5149403075;
+set number := -817690241;
+set mem_action := undef;
+set math_action := INC;
+step
+check calc_result = 4331712834;
+set math_action := undef;
+set mem_action := MRESET;
+step
+check mem = undef;
+check calc_result = 4331712834;
+set mem := undef;
+set math_action := undef;
+set mem_action := MRESET;
+step
+check calc_result = 4331712834;
+check mem = undef;
+set math_action := undef;
+set mem := undef;
+set mem_action := MRESET;
+step
+check mem = undef;
+check calc_result = 4331712834;
+set mem := undef;
+set mem_action := undef;
+set number := 599186879;
+set math_action := DEC;
+step
+check calc_result = 3732525955;
+check mem = undef;
+set mem := undef;
+step

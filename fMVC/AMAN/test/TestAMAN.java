@@ -71,11 +71,10 @@ public class TestAMAN {
 		Environment.timeMngt = TimeMngt.auto_increment;
 		AsmCollection asm = ASMParser.setUpReadAsm(new File(MODEL_AMAN));
 		List<String> stepActions = Arrays.asList("action","zoom","timeToLock");
-		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm, 3, 3, stepActions);
+		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm, 10, 10, stepActions);
 		AsmTestSuite tests = atgt.getTestSuite();
 		int counter = 0;
 		for (AsmTestSequence test : tests.getTests()) {
-			UnchangedRemover.monRemover.optimize(test);
 			UnecessaryChangesRemover opt2 = new UnecessaryChangesRemover(asm);
 			opt2.optimize(test);
 			File file = new File("temp/test" + counter + ".avalla");

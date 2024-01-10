@@ -21,7 +21,7 @@ public class CalcController extends AsmetaFMVCController{
 		super.update(o, arg);
 	
 		// Set the background color of the result text-box based on the sign
-		if (Integer.parseInt(((SimpleCalculatorView)this.m_view).getmTotalTf().getText()) >= 0)
+		if (Long.parseLong(((SimpleCalculatorView)this.m_view).getmTotalTf().getText()) >= 0)
 			((SimpleCalculatorView)this.m_view).getmTotalTf().setBackground(Color.GREEN);
 		else
 			((SimpleCalculatorView)this.m_view).getmTotalTf().setBackground(Color.RED);

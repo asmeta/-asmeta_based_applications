@@ -1,0 +1,64 @@
+scenario test1
+
+load ./model/SimpleCalculator.asm
+
+//// test name test@test1
+//// generated for (test goal): test1: NULL
+check calc_result = 0;
+set mem_action := undef;
+set number := 1186279945;
+set math_action := INC;
+step
+check calc_result = 1186279945;
+set math_action := undef;
+set mem_action := MPLUS;
+step
+check mem = 1186279945;
+check calc_result = 1186279945;
+set mem_action := undef;
+set number := 8735978;
+set math_action := DEC;
+step
+check mem = 1186279945;
+check calc_result = 1177543967;
+set number := -1651170543;
+set mem_action := undef;
+set math_action := DEC;
+step
+check calc_result = 2828714510;
+check mem = 1186279945;
+set math_action := undef;
+set mem_action := MRESET;
+step
+check calc_result = 2828714510;
+check mem = undef;
+set mem_action := undef;
+set mem := undef;
+set number := 832734386;
+set math_action := DEC;
+step
+check calc_result = 1995980124;
+check mem = undef;
+set mem_action := undef;
+set number := -663463769;
+set mem := undef;
+set math_action := DEC;
+step
+check calc_result = 2659443893;
+check mem = undef;
+set mem_action := undef;
+set mem := undef;
+set number := 1144249246;
+set math_action := DEC;
+step
+check mem = undef;
+check calc_result = 1515194647;
+set number := 1202084190;
+set mem_action := undef;
+set mem := undef;
+set math_action := INC;
+step
+check mem = undef;
+check calc_result = 2717278837;
+set mem := undef;
+step

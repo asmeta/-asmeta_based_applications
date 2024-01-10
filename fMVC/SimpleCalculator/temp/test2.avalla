@@ -1,0 +1,6 @@
+scenario test2
+
+load ./model/SimpleCalculator.asm
+
+//// test name test@test2
+//// generated for (test goal): test2: NULL
