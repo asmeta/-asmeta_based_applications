@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +30,7 @@ import view.AMANView;
 
 public class TestAMAN {
 
-	private static final int STEP = 50;
+	private static final int STEP = 100;
 	private static final String MODEL_AMAN = "model/aman2.asm";
 
 	@Test
@@ -58,6 +59,17 @@ public class TestAMAN {
 	}
 	
 	@Test
+	public void testAllScenariosInFolder() throws IOException {
+		Files.walk(new File("scenarios").toPath()).forEach(x -> {
+			try {
+				runTestScenario(x.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+	}
+	
+	@Test
 	public void test1() throws Exception {
 		runTestScenario("model/test1.avalla");
 	}
@@ -69,7 +81,7 @@ public class TestAMAN {
 		Environment.timeMngt = TimeMngt.auto_increment;
 		AsmCollection asm = ASMParser.setUpReadAsm(new File(MODEL_AMAN));
 		List<String> stepActions = Arrays.asList("action","zoom","timeToLock");
-		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm, 10, 10, stepActions);
+		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm, 3, 10, stepActions);
 		AsmTestSuite tests = atgt.getTestSuite();
 		int counter = 0;
 		for (AsmTestSequence test : tests.getTests()) {
