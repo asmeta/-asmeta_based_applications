@@ -10,12 +10,13 @@ set action := NONE;
 step
 check landingSequence(2) = a2;
 check landingSequence(5) = a1;
-check zoomValue = 45;
+check zoomValue = 30;
 set zoom := 15;
 set action := NONE;
 step
 check zoomValue = 15;
 set selectedAirplane := a2;
+set numMoves := 1;
 set action := DOWN;
 step
 check landingSequence(5) = a1;
