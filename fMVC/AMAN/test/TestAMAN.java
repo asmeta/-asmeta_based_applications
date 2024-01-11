@@ -10,22 +10,20 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.asmeta.atgt.generator2.AsmTGBySimulationOnAction;
 import org.asmeta.atgt.generator2.AsmTestGeneratorBySimulation;
-import org.asmeta.atgt.testoptimizer.UnchangedRemover;
 import org.asmeta.atgt.testoptimizer.UnecessaryChangesRemover;
 import org.asmeta.parser.ASMParser;
 import org.asmeta.simulator.Environment;
-import org.asmeta.simulator.TermEvaluator;
 import org.asmeta.simulator.Environment.TimeMngt;
 import org.asmeta.simulator.State;
+import org.asmeta.simulator.TermEvaluator;
 import org.junit.Test;
 
+import asmeta.AsmCollection;
+import asmeta.fmvclib.model.AsmetaFMVCModel;
 import asmeta.fmvclib.testrunner.AsmetaFMVCTestRunner;
 import atgt.coverage.AsmTestSequence;
 import atgt.coverage.AsmTestSuite;
 import atgt.testseqexport.ToAvallaLastAction;
-import atgt.testseqexport.toAvalla;
-import asmeta.AsmCollection;
-import asmeta.fmvclib.model.AsmetaFMVCModel;
 import controller.AMANController;
 import view.AMANView;
 
