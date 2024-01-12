@@ -26,6 +26,7 @@ import asmeta.fmvclib.annotations.AsmetaRunStep;
 import asmeta.fmvclib.controller.ButtonColumn;
 import asmeta.fmvclib.view.AsmetaFMVCView;
 import asmeta.fmvclib.view.XButtonModel;
+import customcomponents.CustomSliderUI;
 
 public class AMANView implements AsmetaFMVCView {
 
@@ -99,7 +100,12 @@ public class AMANView implements AsmetaFMVCView {
 		frame.setTitle("ASMETA Aman");
 
 		// The zoom slider
-		zoom = new JSlider();
+		zoom = new JSlider() {
+			@Override
+            public void updateUI() {
+                setUI(new CustomSliderUI(this));
+            }
+		};
 		zoom.setSnapToTicks(true);
 		zoom.setMajorTickSpacing(5);
 		zoom.setValue(30);

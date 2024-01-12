@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +32,17 @@ public class TestSimpleCalculator {
 
 	public static final String MODEL = "model/SimpleCalculator.asm";
 	public static final int STEP = 50;
+	
+	@Test
+	public void testAllScenariosInFolder() throws IOException {
+		Files.walk(new File("scenarios").toPath()).forEach(x -> {
+			try {
+				runTestScenario(x.toString());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+	}
 	
 	@Test
 	public void testGenerateAndRun() throws Exception {
