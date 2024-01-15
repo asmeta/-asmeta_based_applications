@@ -88,6 +88,7 @@ public class AMANView implements AsmetaFMVCView {
 	XButtonModel isLockedModel;
 	JTable isLocked;
 
+	@SuppressWarnings("serial")
 	public AMANView() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		
 		// The application frame
