@@ -34,9 +34,9 @@ signature:
     static search: Prod(Airplane, TimeSlot) -> TimeSlot
     static canBeMovedUp: Prod(Airplane, TimeSlot) -> Boolean
     static canBeMovedDown: Prod(Airplane, TimeSlot) -> Boolean
-    static a1: Airplane
-    static a2: Airplane
-    static a3: Airplane
+    static fr1988: Airplane
+    static u21748: Airplane
+    static fr1989: Airplane
     static a4: Airplane
 
 definitions:

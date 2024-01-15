@@ -1,13 +1,13 @@
 scenario test2
 
-load ./model/aman2.asm
+load ../model/aman2.asm
 
 //// test name test@test2
 //// generated for (test goal): test2: NULL
 check lastTimeUpdated = 0;
 set action := undef;
 set timeToLock := undef;
-set selectedAirplane := a1;
+set selectedAirplane := fr1988;
 set zoom := 45;
 step
 check timeShown(44) = 45;
@@ -63,7 +63,7 @@ check timeShown(28) = 29;
 check timeShown(3) = 4;
 set landingSequence(28) := undef;
 set zoom := undef;
-set selectedAirplane := a1;
+set selectedAirplane := fr1988;
 set action := undef;
 set timeToLock := 28;
 step

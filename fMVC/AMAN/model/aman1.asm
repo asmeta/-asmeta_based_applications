@@ -1,5 +1,4 @@
 // ABZ 2023 - fMVC
-
 asm aman1
 
 import StandardLibrary
@@ -48,10 +47,10 @@ signature:
 	static canBeMovedUp: Prod(Airplane,TimeSlot) -> Boolean
 	static canBeMovedDown: Prod(Airplane,TimeSlot) -> Boolean
 	
-	static a1: Airplane
-	static a2: Airplane
-	static a3: Airplane
-	static a4: Airplane
+	static fr1988: Airplane
+	static u21748: Airplane
+	static fr1989: Airplane
+	static u21749: Airplane
 	 
 definitions:
 	
@@ -77,32 +76,36 @@ definitions:
 	
 	function canBeMovedUp($airplane in Airplane, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($airplane)) in
-			if ($currentLT + $nMov) <= 45 then if (landingSequence($currentLT + $nMov) != undef) then false
-			else if ($currentLT + $nMov + 1) <= 45 then if (landingSequence($currentLT + $nMov + 1) != undef) then false
-			else if ($currentLT + $nMov + 2) <= 45 then if (landingSequence($currentLT + $nMov + 2) != undef) then false
-			else if ($currentLT + $nMov + 3) <= 45 then if (landingSequence($currentLT + $nMov + 3) != undef) then false 
-			else true endif endif endif endif endif endif endif endif
-			endlet
+			if ($currentLT != undef) then
+				if ($currentLT + $nMov) <= 45 then if (landingSequence($currentLT + $nMov) != undef) then false
+				else if ($currentLT + $nMov + 1) <= 45 then if (landingSequence($currentLT + $nMov + 1) != undef) then false
+				else if ($currentLT + $nMov + 2) <= 45 then if (landingSequence($currentLT + $nMov + 2) != undef) then false
+				else if ($currentLT + $nMov + 3) <= 45 then if (landingSequence($currentLT + $nMov + 3) != undef) then false 
+				else true endif endif endif endif endif endif endif endif
+			else false endif
+		endlet
 		
 	function canBeMovedDown($airplane in Airplane, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($airplane)) in
-			if ($currentLT - $nMov) >= 0 then
-			if (landingSequence($currentLT - $nMov) != undef) then false
-				else  
-					if ($currentLT - $nMov - 1) >= 0 then 
-						if (landingSequence($currentLT - $nMov - 1) != undef) then false
-						else 
-							if ($currentLT - $nMov - 2) >= 0 then 
-								if (landingSequence($currentLT - $nMov - 2) != undef) then false
-								else 
-									if ($currentLT - $nMov - 3) >= 0 then 
-										if (landingSequence($currentLT - $nMov - 3) != undef) then false 
+			if ($currentLT != undef) then
+				if ($currentLT - $nMov) >= 0 then
+				if (landingSequence($currentLT - $nMov) != undef) then false
+					else  
+						if ($currentLT - $nMov - 1) >= 0 then 
+							if (landingSequence($currentLT - $nMov - 1) != undef) then false
+							else 
+								if ($currentLT - $nMov - 2) >= 0 then 
+									if (landingSequence($currentLT - $nMov - 2) != undef) then false
+									else 
+										if ($currentLT - $nMov - 3) >= 0 then 
+											if (landingSequence($currentLT - $nMov - 3) != undef) then false 
+											else true endif 
 										else true endif 
-									else true endif 
-								endif 
-							else true endif 
-						endif
-					else true endif endif endif
+									endif 
+								else true endif 
+							endif
+						else true endif endif endif
+			else false endif
 		endlet
 	
 
@@ -110,8 +113,8 @@ definitions:
 	// the PLAN ATCo decides to move up an airplane
 	rule r_moveUp($a in Airplane, $manual in Boolean, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($a)) in
-		if ($currentLT != undef and $nMov != undef) then
-			if $currentLT < zoomValue and not blocked($currentLT + $nMov) and canBeMovedUp($a, $nMov) then 
+		if ($currentLT != undef and $nMov != undef and canBeMovedUp($a, $nMov) != undef) then
+			if $currentLT < zoomValue and $currentLT + $nMov <= 45 and not blocked($currentLT + $nMov) and canBeMovedUp($a, $nMov) then 
 			par  
 				landingSequence($currentLT + $nMov):= $a
 				landingSequence($currentLT):= undef
@@ -124,7 +127,7 @@ definitions:
 	// the PLAN ATCo decides to move down an airplane
 	rule r_moveDown($a in Airplane, $manual in Boolean, $nMov in TimeSlot) =
 		let ($currentLT = landingTime($a)) in
-		if ($currentLT != undef and $nMov != undef) then
+		if ($currentLT != undef and $nMov != undef and canBeMovedDown($a, $nMov) != undef) then
 			// The function is called by AMAN -> It is ok to execute without checking anything
 			if ($currentLT <= 0 and not $manual) then
 				par
@@ -139,7 +142,7 @@ definitions:
 					landingSequenceColor($currentLT - $nMov) := landingSequenceColor($currentLT)
 					landingSequenceColor($currentLT) := WHITE
 				endpar				
-				else if $currentLT > 0 and not blocked($currentLT - $nMov) and canBeMovedDown($a, $nMov) then 
+				else if ($currentLT-$nMov) >= 0 and $currentLT > 0 and not blocked($currentLT - $nMov) and canBeMovedDown($a, $nMov) then 
 				par  
 					landingSequence($currentLT - $nMov):= $a
 					landingSequence($currentLT):= undef
@@ -167,7 +170,7 @@ definitions:
 		
 	// Update the locks depending on user input
 	rule r_update_lock =
-		if timeToLock != undef then
+		if not isUndef(timeToLock) then
 			if landingSequence(timeToLock) = undef then blocked(timeToLock) := not (blocked(timeToLock)) endif endif
 		
 			     
@@ -181,7 +184,11 @@ definitions:
 	// REQ6: An aircraft label cannot be moved into a blocked time period;
 	// CTLSPEC (forall $a in Airplane, $t in TimeSlot with ag(landingTime($a) = $t implies not blocked($t)))
 
-	// MAIN RULE
+
+
+
+
+   // MAIN RULE
 	main rule r_Main =
 		par		
 			// Update GUI
@@ -199,15 +206,15 @@ definitions:
 
 // INITIAL STATE
 default init s0:
-	function landingSequence($t in TimeSlot) = if $t = 5 then a1 else 
-										   if $t = 2 then a2 else
-										   if $t = 18 then a3 else
-										   if $t = 35 then a4 else 
+	function landingSequence($t in TimeSlot) = if $t = 5 then fr1988 else 
+										   if $t = 2 then u21748 else
+										   if $t = 18 then fr1989 else
+										   if $t = 35 then u21749 else
 										   undef endif endif endif endif
 	function zoomValue = 30
 	function action = NONE
 	function selectedAirplane = undef
-	function statusOutput($t in Airplane) = if $t = a1 then UNSTABLE else if $t = a2 then FREEZE else STABLE endif endif	
+	function statusOutput($t in Airplane) = if $t = fr1988 then UNSTABLE else if $t = u21748 then FREEZE else STABLE endif endif	
 	function landingSequenceColor($t in TimeSlot) = if $t = 5 then YELLOW else
 												if $t = 2 then CYAN else
 												WHITE

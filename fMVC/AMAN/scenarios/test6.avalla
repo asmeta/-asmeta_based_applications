@@ -1,6 +1,6 @@
 scenario test6
 
-load ./model/aman2.asm
+load ../model/aman2.asm
 
 //// test name test@test6
 //// generated for (test goal): test6: NULL
@@ -40,7 +40,7 @@ check landingSequence(19) = undef;
 check timeShown(41) = 42;
 check timeShown(9) = 10;
 check landingSequence(9) = undef;
-check landingSequence(5) = a1;
+check landingSequence(5) = fr1988;
 check timeShown(1) = 2;
 check timeShown(18) = 19;
 check landingSequence(1) = undef;
@@ -55,7 +55,7 @@ check timeShown(14) = 15;
 check landingSequence(10) = undef;
 check landingSequence(14) = undef;
 check timeShown(30) = 31;
-check landingSequence(18) = a3;
+check landingSequence(18) = fr1989;
 check landingSequence(8) = undef;
 check timeShown(6) = 7;
 check landingSequence(4) = undef;

@@ -1,42 +1,48 @@
-scenario test1
+scenario test_orig4
 
-load aman2.asm
+load ./model/aman2.asm
 
-//// test name test@test1
-//// generated for (test goal): test1: NULL
-check landingSequence(1) = undef;
+//// test name test@test4
+//// generated for (test goal): test4: NULL
 check lastTimeUpdated = 0;
-check blocked(1) = false;
-set timeToLock := 1;
+check landingSequence(32) = undef;
+check blocked(32) = false;
 set mCurrTimeSecs := 1;
-set zoom := undef;
+set timeToLock := 32;
 set action := undef;
-set selectedAirplane := a2;
+set zoom := undef;
+set selectedAirplane := fr1988;
 step
 check timeShown(44) = 45;
+check landingSequence(40) = undef;
 check timeShown(12) = 13;
 check timeShown(20) = 21;
 check timeShown(32) = 33;
+check landingSequenceColor(2) = CYAN;
 check timeShown(16) = 17;
 check timeShown(24) = 25;
 check timeShown(36) = 37;
 check timeShown(40) = 41;
 check timeShown(8) = 9;
+check landingSequence(2) = u21748;
 check timeShown(0) = 1;
 check timeShown(17) = 18;
 check timeShown(29) = 30;
 check timeShown(4) = 5;
+check blocked(32) = true;
 check timeShown(33) = 34;
 check timeShown(21) = 22;
 check timeShown(37) = 38;
 check timeShown(13) = 14;
 check timeShown(25) = 26;
 check timeShown(41) = 42;
-check blocked(1) = true;
+check landingSequence(39) = undef;
+check lastTimeUpdated = 0;
 check timeShown(9) = 10;
-check hours = 0;
+check mins = 0;
 check timeShown(1) = 2;
 check timeShown(18) = 19;
+check landingSequence(1) = undef;
 check timeShown(5) = 6;
 check timeShown(22) = 23;
 check timeShown(34) = 35;
@@ -45,54 +51,40 @@ check timeShown(10) = 11;
 check timeShown(26) = 27;
 check timeShown(38) = 39;
 check timeShown(14) = 15;
+check landingSequence(38) = undef;
+check hours = 0;
 check timeShown(30) = 31;
 check timeShown(6) = 7;
 check timeShown(19) = 20;
 check timeShown(39) = 40;
-check mins = 0;
+check landingSequence(0) = undef;
 check timeShown(2) = 3;
 check timeShown(11) = 12;
 check timeShown(23) = 24;
-check lastTimeUpdated = 0;
 check timeShown(31) = 32;
 check timeShown(43) = 44;
 check timeShown(15) = 16;
 check timeShown(27) = 28;
 check timeShown(35) = 36;
+check landingSequence(37) = undef;
 check timeShown(7) = 8;
+check blocked(37) = false;
 check timeShown(28) = 29;
+check zoomValue = 30;
 check timeShown(3) = 4;
-set timeToLock := undef;
-set action := undef;
 set mCurrTimeSecs := 2;
-set zoom := 22;
-set selectedAirplane := a2;
-step
-check lastTimeUpdated = 0;
-check hours = 0;
-check landingSequence(0) = undef;
-check blocked(0) = false;
-check mins = 0;
-set action := undef;
-set selectedAirplane := fr1989;
-set mCurrTimeSecs := 3;
+set action := UP;
+set selectedAirplane := u21748;
+set timeToLock := undef;
+set numMoves := 35;
 set zoom := undef;
-set timeToLock := 0;
 step
-check mins = 0;
-check landingSequence(3) = undef;
-check blocked(3) = false;
-check lastTimeUpdated = 0;
-check hours = 0;
-check blocked(0) = true;
-set zoom := undef;
-set action := undef;
-set mCurrTimeSecs := 4;
-set selectedAirplane := fr1988;
-set timeToLock := 3;
-step
-check mins = 0;
+check landingSequenceColor(37) = CYAN;
+check landingSequenceColor(2) = WHITE;
+check landingSequence(2) = undef;
+check landingSequence(37) = u21748;
 check hours = 0;
 check lastTimeUpdated = 0;
-check blocked(3) = true;
+check mins = 0;
+check zoomValue = 30;
 step

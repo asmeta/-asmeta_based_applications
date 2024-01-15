@@ -2,17 +2,17 @@
 scenario SCENARIO_NAME
 load aman0.asm
 set zoom := 15;
-check landingSequence(2) = a1;
-check landingSequence(5) = a1;
+check landingSequence(2) = fr1988;
+check landingSequence(5) = fr1988;
 set action := NONE;
 step
 check landingSequence(2) = a2;
-check landingSequence(5) = a1;
+check landingSequence(5) = fr1988;
 set zoom := 15;
 set action := DOWN;
-set selectedAirplane := a1;
+set selectedAirplane := fr1988;
 step
-check landingSequence(2) = a1;
+check landingSequence(2) = fr1988;
 check landingSequence(5) = undef;
-check landingSequence(6) = a1;
+check landingSequence(6) = fr1988;
 step

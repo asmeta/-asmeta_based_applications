@@ -39,9 +39,9 @@ signature:
 	static canBeMovedUp: Airplane -> Boolean
 	static canBeMovedDown: Airplane -> Boolean
 	
-	static a1: Airplane
-	static a2: Airplane
-	static a3: Airplane
+	static fr1988: Airplane
+	static u21748: Airplane
+	static fr1989: Airplane
 	static a4: Airplane
 	 
 definitions:
@@ -182,20 +182,20 @@ definitions:
 			r_update_zoom[]
 			
 			// Move airplanes
-			if selectedAirplane = a1 then
-				if action = UP then r_moveUp[a1, true] else
-				if action = DOWN then r_moveDown[a1, true] else
-				if action = HOLD then r_hold[a1] endif endif endif 
+			if selectedAirplane = fr1988 then
+				if action = UP then r_moveUp[fr1988, true] else
+				if action = DOWN then r_moveDown[fr1988, true] else
+				if action = HOLD then r_hold[fr1988] endif endif endif 
 			endif
-			if selectedAirplane = a2 then
-				if action = UP then r_moveUp[a2, true] else
-				if action = DOWN then r_moveDown[a2, true] else
-				if action = HOLD then r_hold[a2] endif endif endif 
+			if selectedAirplane = u21748 then
+				if action = UP then r_moveUp[u21748, true] else
+				if action = DOWN then r_moveDown[u21748, true] else
+				if action = HOLD then r_hold[u21748] endif endif endif 
 			endif
-			if selectedAirplane = a3 then
-				if action = UP then r_moveUp[a3, true] else
-				if action = DOWN then r_moveDown[a3, true] else
-				if action = HOLD then r_hold[a3] endif endif endif 
+			if selectedAirplane = fr1989 then
+				if action = UP then r_moveUp[fr1989, true] else
+				if action = DOWN then r_moveDown[fr1989, true] else
+				if action = HOLD then r_hold[fr1989] endif endif endif 
 			endif
 			if selectedAirplane = a4 then
 				if action = UP then r_moveUp[a4, true] else
@@ -206,13 +206,13 @@ definitions:
 
 // INITIAL STATE
 default init s0:
-	function landingSequence($t in TimeSlot) = if $t = 5 then a1 else 
-										   	   if $t = 2 then a2 else 
+	function landingSequence($t in TimeSlot) = if $t = 5 then fr1988 else 
+										   	   if $t = 2 then u21748 else 
 										   	   undef endif endif
 	function zoomValue = 30
 	function action = NONE
 	function selectedAirplane = undef
-	function statusOutput($t in Airplane) = if $t = a1 then UNSTABLE else if $t = a2 then FREEZE else STABLE endif endif	
+	function statusOutput($t in Airplane) = if $t = fr1988 then UNSTABLE else if $t = u21748 then FREEZE else STABLE endif endif	
 	function landingSequenceColor($t in TimeSlot) = if $t = 5 then YELLOW else
 												if $t = 2 then CYAN else
 												WHITE

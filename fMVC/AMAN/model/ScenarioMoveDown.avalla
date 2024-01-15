@@ -5,11 +5,11 @@
 scenario ScenarioMoveDown
 load aman2.asm
 check landingSequence(2) = a2;
-check landingSequence(5) = a1;
+check landingSequence(5) = fr1988;
 set action := NONE;
 step
 check landingSequence(2) = a2;
-check landingSequence(5) = a1;
+check landingSequence(5) = fr1988;
 check zoomValue = 30;
 set zoom := 15;
 set action := NONE;
@@ -19,6 +19,6 @@ set selectedAirplane := a2;
 set numMoves := 1;
 set action := DOWN;
 step
-check landingSequence(5) = a1;
+check landingSequence(5) = fr1988;
 check landingSequence(2) = undef;
 check landingSequence(1) = a2;

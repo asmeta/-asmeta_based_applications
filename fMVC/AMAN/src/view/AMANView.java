@@ -178,7 +178,7 @@ public class AMANView implements AsmetaFMVCView {
 		
 		// The panel containing data of minutes and hours
 		currentTimePanel = new JPanel();
-		currentTimePanel.setBounds(119, 0, 101, 40);
+		currentTimePanel.setBounds(110, 0, 110, 40);
 		currentTimePanel.setBackground(Color.black);
 		currentTimePanel.setOpaque(true);
 		currentTimePanel.setBorder(new LineBorder(Color.WHITE));

@@ -25,6 +25,7 @@ import asmeta.fmvclib.testrunner.AsmetaFMVCTestRunner;
 import atgt.coverage.AsmTestSequence;
 import atgt.coverage.AsmTestSuite;
 import atgt.testseqexport.ToAvallaLastAction;
+import atgt.testseqexport.toAvalla;
 import controller.AMANController;
 import view.AMANView;
 
@@ -84,7 +85,7 @@ public class TestAMAN {
 		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm, 3, 10, stepActions);
 		AsmTestSuite tests = atgt.getTestSuite();
 		int counter = 0;
-		for (AsmTestSequence test : tests.getTests()) {
+		for (AsmTestSequence test : tests.getTests()) {			
 			UnecessaryChangesRemover opt2 = new UnecessaryChangesRemover(asm);
 			opt2.optimize(test);
 			File file = new File("temp/test" + counter + ".avalla");
@@ -94,6 +95,26 @@ public class TestAMAN {
 			counter++;
 		}
 	}
+	
+	@Test
+	public void testRndGenerate() throws Exception {
+		Logger.getLogger(TermEvaluator.class).setLevel(Level.DEBUG);
+		Logger.getLogger(State.class).setLevel(Level.DEBUG);
+		Environment.timeMngt = TimeMngt.auto_increment;
+		AsmCollection asm = ASMParser.setUpReadAsm(new File(MODEL_AMAN));
+		List<String> stepActions = Arrays.asList("action","zoom","timeToLock");
+		AsmTestGeneratorBySimulation atgt = new AsmTGBySimulationOnAction(asm, 3, 10, stepActions);
+		AsmTestSuite tests = atgt.getTestSuite();
+		int counter = 0;
+		for (AsmTestSequence test : tests.getTests()) {			
+			File file = new File("temp/test_orig" + counter + ".avalla");
+			toAvalla export = new toAvalla(file, test, MODEL_AMAN);
+			export.save();
+			counter++;
+		}
+	}
+
+	
 
 	public void runTestScenario(String scenario) throws Exception, ClassNotFoundException, InstantiationException,
 			IllegalAccessException, UnsupportedLookAndFeelException, IOException, InterruptedException {

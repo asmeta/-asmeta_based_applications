@@ -82,11 +82,11 @@ definitions:
 							step__ := -2
 						endseq
 					endif
-					if landingSequence(18) = a3 then
-						result := print("check succeeded: landingSequence(18) = a3")
+					if landingSequence(18) = fr1989 then
+						result := print("check succeeded: landingSequence(18) = fr1989")
 					else
 						seq
-							result := print("CHECK FAILED: landingSequence(18) = a3 at step 0")
+							result := print("CHECK FAILED: landingSequence(18) = fr1989 at step 0")
 							step__ := -2
 						endseq
 					endif
@@ -170,11 +170,11 @@ definitions:
 							step__ := -2
 						endseq
 					endif
-					if landingSequence(5) = a1 then
-						result := print("check succeeded: landingSequence(5) = a1")
+					if landingSequence(5) = fr1988 then
+						result := print("check succeeded: landingSequence(5) = fr1988")
 					else
 						seq
-							result := print("CHECK FAILED: landingSequence(5) = a1 at step 0")
+							result := print("CHECK FAILED: landingSequence(5) = fr1988 at step 0")
 							step__ := -2
 						endseq
 					endif
@@ -194,11 +194,11 @@ definitions:
 							step__ := -2
 						endseq
 					endif
-					if landingSequence(2) = a2 then
-						result := print("check succeeded: landingSequence(2) = a2")
+					if landingSequence(2) = u21748 then
+						result := print("check succeeded: landingSequence(2) = u21748")
 					else
 						seq
-							result := print("CHECK FAILED: landingSequence(2) = a2 at step 0")
+							result := print("CHECK FAILED: landingSequence(2) = u21748 at step 0")
 							step__ := -2
 						endseq
 					endif
@@ -261,7 +261,7 @@ definitions:
 					r_Main[]
 					action := UP
 					zoom := 41
-					selectedAirplane := a3
+					selectedAirplane := fr1989
 					timeToLock := 15
 					step__ := step__ + 1
 				endseq
@@ -363,11 +363,11 @@ definitions:
 						step__ := -2
 					endseq
 				endif
-				if landingSequence(5) = a1 then
-					result := print("check succeeded: landingSequence(5) = a1")
+				if landingSequence(5) = fr1988 then
+					result := print("check succeeded: landingSequence(5) = fr1988")
 				else
 					seq
-						result := print("CHECK FAILED: landingSequence(5) = a1 at step 1")
+						result := print("CHECK FAILED: landingSequence(5) = fr1988 at step 1")
 						step__ := -2
 					endseq
 				endif
@@ -387,11 +387,11 @@ definitions:
 						step__ := -2
 					endseq
 				endif
-				if landingSequence(2) = a2 then
-					result := print("check succeeded: landingSequence(2) = a2")
+				if landingSequence(2) = u21748 then
+					result := print("check succeeded: landingSequence(2) = u21748")
 				else
 					seq
-						result := print("CHECK FAILED: landingSequence(2) = a2 at step 1")
+						result := print("CHECK FAILED: landingSequence(2) = u21748 at step 1")
 						step__ := -2
 					endseq
 				endif
@@ -846,7 +846,7 @@ definitions:
 				r_Main[]
 				action := DOWN
 				zoom := 23
-				selectedAirplane := a1
+				selectedAirplane := fr1988
 				timeToLock := 12
 				numMoves := 37
 				step__ := step__ + 1
@@ -949,11 +949,11 @@ definitions:
 					step__ := -2
 				endseq
 			endif
-			if landingSequence(5) = a1 then
-				result := print("check succeeded: landingSequence(5) = a1")
+			if landingSequence(5) = fr1988 then
+				result := print("check succeeded: landingSequence(5) = fr1988")
 			else
 				seq
-					result := print("CHECK FAILED: landingSequence(5) = a1 at step 2")
+					result := print("CHECK FAILED: landingSequence(5) = fr1988 at step 2")
 					step__ := -2
 				endseq
 			endif
@@ -973,11 +973,11 @@ definitions:
 					step__ := -2
 				endseq
 			endif
-			if landingSequence(2) = a2 then
-				result := print("check succeeded: landingSequence(2) = a2")
+			if landingSequence(2) = u21748 then
+				result := print("check succeeded: landingSequence(2) = u21748")
 			else
 				seq
-					result := print("CHECK FAILED: landingSequence(2) = a2 at step 2")
+					result := print("CHECK FAILED: landingSequence(2) = u21748 at step 2")
 					step__ := -2
 				endseq
 			endif
@@ -1530,11 +1530,11 @@ definitions:
 				step__ := -2
 			endseq
 		endif
-		if landingSequence(5) = a1 then
-			result := print("check succeeded: landingSequence(5) = a1")
+		if landingSequence(5) = fr1988 then
+			result := print("check succeeded: landingSequence(5) = fr1988")
 		else
 			seq
-				result := print("CHECK FAILED: landingSequence(5) = a1 at step 3")
+				result := print("CHECK FAILED: landingSequence(5) = fr1988 at step 3")
 				step__ := -2
 			endseq
 		endif
@@ -1554,11 +1554,11 @@ definitions:
 				step__ := -2
 			endseq
 		endif
-		if landingSequence(2) = a2 then
-			result := print("check succeeded: landingSequence(2) = a2")
+		if landingSequence(2) = u21748 then
+			result := print("check succeeded: landingSequence(2) = u21748")
 		else
 			seq
-				result := print("CHECK FAILED: landingSequence(2) = a2 at step 3")
+				result := print("CHECK FAILED: landingSequence(2) = u21748 at step 3")
 				step__ := -2
 			endseq
 		endif
@@ -2036,10 +2036,10 @@ definitions:
         function step__ = 0
         function action = HOLD
         function zoom = 15
-        function selectedAirplane = a3
+        function selectedAirplane = fr1989
         function timeToLock = 33
         function mCurrTimeSecs = 1
-        function landingSequence($t in TimeSlot) = if eq($t,5) then a1 else if eq($t,2) then a2 else if eq($t,18) then a3 else if eq($t,35) then a4 else undef endif endif endif endif
+        function landingSequence($t in TimeSlot) = if eq($t,5) then fr1988 else if eq($t,2) then u21748 else if eq($t,18) then fr1989 else if eq($t,35) then a4 else undef endif endif endif endif
         function zoomValue = 30
         // action is initialized also in the initial state - it will ignored
         // function action = NONE
@@ -2049,7 +2049,7 @@ definitions:
         function timeShown($t in TimeSlot) = plus($t,1)
         // this function does not belong to this asm, but it can be initialized 
         function lastTimeUpdated = currentTimeMins
-        function statusOutput($t in Airplane) = if eq($t,a1) then UNSTABLE else if eq($t,a2) then FREEZE else STABLE endif endif
+        function statusOutput($t in Airplane) = if eq($t,fr1988) then UNSTABLE else if eq($t,u21748) then FREEZE else STABLE endif endif
         function landingSequenceColor($t in TimeSlot) = if eq($t,5) then YELLOW else if eq($t,2) then CYAN else WHITE endif endif
         function blocked($t in TimeSlot) = if eq($t,6) then true else false endif
         // this function does not belong to this asm, but it can be initialized 

@@ -61,7 +61,7 @@ check timeShown(28) = 29;
 check timeShown(3) = 4;
 set action := undef;
 set mCurrTimeSecs := 2;
-set selectedAirplane := a3;
+set selectedAirplane := fr1989;
 set timeToLock := undef;
 set zoom := 16;
 step
@@ -80,7 +80,7 @@ check hours = 0;
 check blocked(17) = true;
 check lastTimeUpdated = 0;
 check mins = 0;
-set selectedAirplane := a3;
+set selectedAirplane := fr1989;
 set timeToLock := undef;
 set zoom := 20;
 set action := undef;

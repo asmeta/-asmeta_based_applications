@@ -5,7 +5,8 @@ asm aman2
 import StandardLibrary
 import CTLlibrary
 import TimeLibrary
-import aman1_wom
+//import aman1_wom
+import aman1
 
 signature:
 	// DOMAINS
@@ -80,17 +81,17 @@ definitions:
 
 // INITIAL STATE
 default init s0:
-	function landingSequence($t in TimeSlot) = if $t = 5 then a1 else 
-										   if $t = 2 then a2 else
-										   if $t = 18 then a3 else
-										   if $t = 35 then a4 else 
+	function landingSequence($t in TimeSlot) = if $t = 5 then fr1988 else
+										   if $t = 2 then u21748 else
+										   if $t = 18 then fr1989 else
+										   if $t = 35 then u21749 else
 										   undef endif endif endif endif
 	function zoomValue = 30
 	function action = NONE
 	function selectedAirplane = undef
 	function timeShown($t in TimeSlot) = ($t + 1)
 	function lastTimeUpdated = currentTimeMins
-	function statusOutput($t in Airplane) = if $t = a1 then UNSTABLE else if $t = a2 then FREEZE else STABLE endif endif	
+	function statusOutput($t in Airplane) = if $t = fr1988 then UNSTABLE else if $t = u21748 then FREEZE else STABLE endif endif	
 	function landingSequenceColor($t in TimeSlot) = if $t = 5 then YELLOW else
 												if $t = 2 then CYAN else
 												WHITE

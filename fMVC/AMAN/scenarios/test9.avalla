@@ -1,6 +1,6 @@
 scenario test9
 
-load ./model/aman2.asm
+load ../model/aman2.asm
 
 //// test name test@test9
 //// generated for (test goal): test9: NULL
@@ -59,7 +59,7 @@ check timeShown(7) = 8;
 check timeShown(28) = 29;
 check timeShown(3) = 4;
 set timeToLock := undef;
-set selectedAirplane := a3;
+set selectedAirplane := fr1989;
 set action := undef;
 set zoom := 37;
 step

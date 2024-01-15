@@ -1,9 +1,10 @@
 // ABZ 2023 - fMVC
 // make use of undef instead of NONE for actions
 // at every time one action is def the otehrs are all undef 
+// use of selected
 // TODO add the invariant
 
-asm aman0_wActionUndef
+asm aman0_v2
 
 import StandardLibrary
 import CTLlibrary
@@ -47,7 +48,7 @@ signature:
 	static fr1988: Airplane
 	static u21748: Airplane
 	static fr1989: Airplane
-	static a4: Airplane
+	static u21749: Airplane
 	 
 definitions:
 	
@@ -186,9 +187,12 @@ definitions:
 			// Update GUI
 			if not isUndef(timeToLock) then r_update_lock[] endif
 			if not isUndef(zoom) then r_update_zoom[] endif
-			if not isUndef(action) then par
-			// Move airplanes
-			if selectedAirplane = fr1988 then
+			if not isUndef(action) and selectedAirplane != undef then
+			// Move selected airplanes
+				if action = UP then r_moveUp[selectedAirplane, true] else
+				if action = DOWN then r_moveDown[selectedAirplane, true] else
+				if action = HOLD then r_hold[selectedAirplane] endif endif endif 
+/*			if selectedAirplane = fr1988 then
 				if action = UP then r_moveUp[fr1988, true] else
 				if action = DOWN then r_moveDown[fr1988, true] else
 				if action = HOLD then r_hold[fr1988] endif endif endif 
@@ -207,8 +211,8 @@ definitions:
 				if action = UP then r_moveUp[a4, true] else
 				if action = DOWN then r_moveDown[a4, true] else
 				if action = HOLD then r_hold[a4] endif endif endif 
+			endif*/
 			endif
-			endpar endif
 		endpar
 
 // INITIAL STATE
