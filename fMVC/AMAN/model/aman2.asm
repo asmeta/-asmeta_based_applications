@@ -29,8 +29,10 @@ definitions:
 	
 	// FUNCTION DEFINITIONS		
 	// Minutes
-	function currentTimeMins = 
+	function currentTimeMins =
+		// note: the division of integers restun a real in asmeta
 		rtoi(mCurrTimeSecs / 60) mod 60
+		// x integer division idiv(mCurrTimeSecs idiv 60) mod 60
 		
 	// Hours
 	function currentTimeHours = 

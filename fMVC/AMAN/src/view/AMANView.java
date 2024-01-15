@@ -185,7 +185,12 @@ public class AMANView implements AsmetaFMVCView {
 		frame.getContentPane().add(currentTimePanel);
 		
 		// The current time hours
-		lblCurrentTimeHours = new JLabel("0");
+		lblCurrentTimeHours = new JLabel() {
+			@Override
+			public void setText(String text) {
+				super.setText(("00" + text).substring(text.length(), 2 + text.length()));
+			}
+		};
 		currentTimePanel.add(lblCurrentTimeHours);
 		lblCurrentTimeHours.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblCurrentTimeHours.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
@@ -199,7 +204,12 @@ public class AMANView implements AsmetaFMVCView {
 		lblTwoDots.setForeground(Color.white);
 		
 		// The current time minutes
-		lblCurrentTimeMins = new JLabel("0");
+		lblCurrentTimeMins = new JLabel(){
+			@Override
+			public void setText(String text) {
+				super.setText(("00" + text).substring(text.length(), 2 + text.length()));
+			}
+		};
 		currentTimePanel.add(lblCurrentTimeMins);
 		lblCurrentTimeMins.setHorizontalAlignment(SwingConstants.LEFT);
 		lblCurrentTimeMins.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
