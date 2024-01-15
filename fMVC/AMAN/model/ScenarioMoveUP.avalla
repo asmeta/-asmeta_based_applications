@@ -4,11 +4,11 @@
 //// Lastly, the airpline fr1988 is moved UP
 scenario ScenarioMoveUP
 load aman2.asm
-check landingSequence(2) = a2;
+check landingSequence(2) = u21748;
 check landingSequence(5) = fr1988;
 set action := NONE;
 step
-check landingSequence(2) = a2;
+check landingSequence(2) = u21748;
 check landingSequence(5) = fr1988;
 check zoomValue = 30;
 set zoom := 15;
@@ -21,4 +21,4 @@ set action := UP;
 step
 check landingSequence(7) = fr1988;
 check landingSequence(5) = undef;
-check landingSequence(2) = a2;
+check landingSequence(2) = u21748;

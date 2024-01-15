@@ -3,7 +3,7 @@
 //// Then we try to move a2 in the time instant 1 and we check that nothing changes
 scenario ScenarioLOCK
 load aman2.asm
-check landingSequence(2) = a2;
+check landingSequence(2) = u21748;
 check landingSequence(5) = fr1988;
 set action := NONE;
 set timeToLock := 1;
@@ -14,10 +14,10 @@ set timeToLock := 0;
 step
 check blocked(1) = true;
 check blocked(0) = true;
-set selectedAirplane := a2;
+set selectedAirplane := u21748;
 set numMoves := 1;
 set action := DOWN;
 step
 check blocked(1) = true;
-check landingSequence(2) = a2;
+check landingSequence(2) = u21748;
 check landingSequence(5) = fr1988;
