@@ -83,7 +83,7 @@ public class AMANController extends AsmetaFMVCController {
 						((JComponent) c).setOpaque(true);
 					}
 				} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException
-						| IndexOutOfBoundsException e) {
+						| IndexOutOfBoundsException | NullPointerException e) {
 					((JComponent) c).setOpaque(false);
 				}
 				return c;
