@@ -16,6 +16,7 @@ signature:
 	// FUNCTIONS
 	derived currentTimeMins: Integer
 	derived currentTimeHours: Integer
+	derived zoomChanged: Boolean
 	
 	controlled timeShown: TimeSlot -> Minutes
 	controlled lastTimeUpdated : Minutes
@@ -38,6 +39,10 @@ definitions:
 	// Hours
 	function currentTimeHours = 
 		rtoi(mCurrTimeSecs / 3600) mod 24
+		
+	// Zoom changed
+	function zoomChanged =
+		if zoom != zoomValue then true else undef endif
 	
 	// Update the current time
 	rule r_update_time = 
@@ -60,6 +65,10 @@ definitions:
 				endpar
 			endif
 		endpar
+		
+	// INVARIANTS
+	invariant inv_action over timeToLock, zoomChanged, action: (timeToLock != undef implies (zoomChanged=undef and action=undef)) and (zoomChanged != undef implies (timeToLock=undef and action=undef)) and (action != undef implies (timeToLock=undef and zoomChanged=undef)) 
+	
 	
 	// MAIN RULE
 	main rule r_Main =

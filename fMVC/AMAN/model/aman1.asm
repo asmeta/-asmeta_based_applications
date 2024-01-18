@@ -185,10 +185,7 @@ definitions:
 	// CTLSPEC (forall $a in Airplane, $t in TimeSlot with ag(landingTime($a) = $t implies not blocked($t)))
 
 
-
-
-
-   // MAIN RULE
+    // MAIN RULE
 	main rule r_Main =
 		par		
 			// Update GUI
