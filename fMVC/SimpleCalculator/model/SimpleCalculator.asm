@@ -19,9 +19,9 @@ signature:
 definitions:
 
 	// INVARIANTS
-	invariant inv_win over calc_result:  calc_result >= 0
+	invariant inv_res over calc_result:  calc_result >= 0
 
-	invariant inv_action over math_action, mem_action: math_action=undef xor mem_action=undef 
+	invariant inv_action over math_action, mem_action: (math_action != undef implies mem_action=undef) and (mem_action != undef implies math_action=undef) 
 
 
 	// MAIN RULE
