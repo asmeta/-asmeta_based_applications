@@ -135,7 +135,7 @@ check landingSequence(18) = undef;
 set selectedAirplane := u21748;
 set zoom := undef;
 set timeToLock := undef;
-set action := NONE;
+set action := undef;
 step
 check landingSequence(44) = undef;
 check zoomValue = 30;

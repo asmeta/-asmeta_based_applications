@@ -87,7 +87,7 @@ default init s0:
 										   if $t = 35 then u21749 else
 										   undef endif endif endif endif
 	function zoomValue = 30
-	function action = NONE
+	function action = undef
 	function selectedAirplane = undef
 	function timeShown($t in TimeSlot) = ($t + 1)
 	function lastTimeUpdated = currentTimeMins

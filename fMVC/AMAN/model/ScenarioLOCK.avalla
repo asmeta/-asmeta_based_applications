@@ -5,7 +5,7 @@ scenario ScenarioLOCK
 load aman2.asm
 check landingSequence(2) = u21748;
 check landingSequence(5) = fr1988;
-set action := NONE;
+set action := undef;
 set timeToLock := 1;
 step
 check blocked(1) = true;

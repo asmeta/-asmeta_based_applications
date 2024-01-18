@@ -6,7 +6,7 @@ scenario ScenarioMoveUP
 load aman2.asm
 check landingSequence(2) = u21748;
 check landingSequence(5) = fr1988;
-set action := NONE;
+set action := undef;
 step
 check landingSequence(2) = u21748;
 check landingSequence(5) = fr1988;

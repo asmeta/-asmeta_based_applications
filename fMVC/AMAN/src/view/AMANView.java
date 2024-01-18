@@ -31,8 +31,7 @@ import customcomponents.CustomSliderUI;
 public class AMANView implements AsmetaFMVCView {
 
 	private JFrame frame;
-
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "NONE")
+	
 	@AsmetaMonitoredLocation(asmLocationName = "zoom")
 	@AsmetaRunStep(repaintView = true)
 	private JSlider zoom;
@@ -63,7 +62,6 @@ public class AMANView implements AsmetaFMVCView {
 	@AsmetaControlledLocation(asmLocationName = "zoomValue")
 	JLabel lblZoomValue;
 
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "NONE")
 	@AsmetaRunStep
 	Timer guiTimer;
 
@@ -80,7 +78,6 @@ public class AMANView implements AsmetaFMVCView {
 	JSpinner spnrNumMoves;
 	SpinnerNumberModel modelSpnrNumMoves;
 
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "NONE")
 	@AsmetaMonitoredLocation(asmLocationName = "timeToLock")
 	@AsmetaControlledLocation(asmLocationName = "blocked")
 	@AsmetaRunStep

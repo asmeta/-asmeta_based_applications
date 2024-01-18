@@ -6,13 +6,13 @@ scenario ScenarioMoveDown
 load aman2.asm
 check landingSequence(2) = u21748;
 check landingSequence(5) = fr1988;
-set action := NONE;
+set action := undef;
 step
 check landingSequence(2) = u21748;
 check landingSequence(5) = fr1988;
 check zoomValue = 30;
 set zoom := 15;
-set action := NONE;
+set action := undef;
 step
 check zoomValue = 15;
 set selectedAirplane := u21748;

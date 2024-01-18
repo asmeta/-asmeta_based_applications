@@ -12,7 +12,7 @@ signature:
 	abstract domain Airplane
 	enum domain Status = {UNSTABLE, STABLE, FREEZE}
 	enum domain Color = {YELLOW, CYAN, WHITE}
-	enum domain PTCOAction = {UP, DOWN, NONE, HOLD}
+	enum domain PTCOAction = {UP, DOWN, HOLD}
 	
 	// FUNCTIONS
 	// Landing sequence: it should be bijective partially defined
@@ -192,7 +192,7 @@ definitions:
 	main rule r_Main =
 		par		
 			// Update GUI
-			if action = NONE then r_update_lock[] endif
+			if action = undef then r_update_lock[] endif
 			r_update_zoom[]
 			
 			// Move airplanes
@@ -212,7 +212,7 @@ default init s0:
 										   if $t = 35 then u21749 else
 										   undef endif endif endif endif
 	function zoomValue = 30
-	function action = NONE
+	function action = undef
 	function selectedAirplane = undef
 	function statusOutput($t in Airplane) = if $t = fr1988 then UNSTABLE else if $t = u21748 then FREEZE else STABLE endif endif	
 	function landingSequenceColor($t in TimeSlot) = if $t = 5 then YELLOW else

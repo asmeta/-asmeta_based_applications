@@ -124,7 +124,7 @@ check lastTimeUpdated = 0;
 set timeToLock := undef;
 set zoom := undef;
 set selectedAirplane := u21748;
-set action := NONE;
+set action := undef;
 step
 check zoomValue = 15;
 check mins = 0;
@@ -142,7 +142,7 @@ check lastTimeUpdated = 0;
 set timeToLock := undef;
 set zoom := undef;
 set selectedAirplane := u21748;
-set action := NONE;
+set action := undef;
 step
 check mins = 0;
 check hours = 0;

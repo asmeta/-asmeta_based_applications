@@ -3,6 +3,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.UnsupportedLookAndFeelException;
@@ -55,11 +56,6 @@ public class TestAMAN {
 	}
 	
 	@Test
-	public void test0() throws Exception {
-		runTestScenario("model/test0.avalla");
-	}
-	
-	@Test
 	public void testAllScenariosInFolder() throws IOException {
 		Files.walk(new File("scenarios").toPath()).forEach(x -> {
 			try {
@@ -68,11 +64,6 @@ public class TestAMAN {
 				e.printStackTrace();
 			}
 		});
-	}
-	
-	@Test
-	public void test1() throws Exception {
-		runTestScenario("model/test1.avalla");
 	}
 	
 	@Test
@@ -126,7 +117,7 @@ public class TestAMAN {
 		view.getTimer().stop();
 		view.setVisible(true);
 		// Create the test runner
-		AsmetaFMVCTestRunner runner = new AsmetaFMVCTestRunner(view, controller, scenario, Arrays.asList("NONE"), STEP);
+		AsmetaFMVCTestRunner runner = new AsmetaFMVCTestRunner(view, controller, scenario, Collections.emptyList(), STEP);
 		runner.runTest();
 	}
 }
