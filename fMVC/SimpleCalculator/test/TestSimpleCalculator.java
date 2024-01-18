@@ -73,7 +73,7 @@ public class TestSimpleCalculator {
 		controller.updateAndSimulate(null);
 		view.setVisible(true);
 		// Create the test runner
-		AsmetaFMVCTestRunner runner = new AsmetaFMVCTestRunner(view, controller, scenario, Collections.emptyList(), STEP);
+		AsmetaFMVCTestRunner runner = new AsmetaFMVCTestRunner(view, controller, scenario, STEP);
 		runner.runTest();
 	}
 
