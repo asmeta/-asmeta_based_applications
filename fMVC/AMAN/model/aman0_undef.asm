@@ -1,5 +1,5 @@
 // ABZ 2023 - fMVC
-// first version of AMAN - with undef when a aiplane is not found
+// first version of AMAN - with undef when a airplane is not found
 asm aman0_undef
 
 import StandardLibrary
