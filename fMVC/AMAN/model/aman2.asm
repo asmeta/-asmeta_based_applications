@@ -3,7 +3,7 @@
 asm aman2
 
 import StandardLibrary
-import CTLlibrary
+import CTLLibrary
 import TimeLibrary
 //import aman1_wom
 import aman1

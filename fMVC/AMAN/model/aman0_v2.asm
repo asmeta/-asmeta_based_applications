@@ -7,8 +7,8 @@
 asm aman0_v2
 
 import StandardLibrary
-import CTLlibrary
-import LTLlibrary
+import CTLLibrary
+import LTLLibrary
 export *
 
 signature:

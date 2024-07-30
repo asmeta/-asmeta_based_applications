@@ -6,8 +6,8 @@
 asm aman0_wActionUndef
 
 import StandardLibrary
-import CTLlibrary
-import LTLlibrary
+import CTLLibrary
+import LTLLibrary
 export *
 
 signature:

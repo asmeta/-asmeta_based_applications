@@ -3,8 +3,8 @@
 asm aman0
 
 import StandardLibrary
-import CTLlibrary
-import LTLlibrary
+import CTLLibrary
+import LTLLibrary
 export *
 
 signature:

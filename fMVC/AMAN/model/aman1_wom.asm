@@ -5,7 +5,7 @@
 module aman1_wom
 
 import StandardLibrary
-import CTLlibrary
+import CTLLibrary
 export *
 
 signature:
