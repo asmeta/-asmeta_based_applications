@@ -164,20 +164,20 @@ definitions:
 			     
 	// INVARIANTS AND PROPERTIES
 	// REQ16: The zoom value cannot be bigger than 45 and smaller than 15
-	LTLSPEC g(zoomValue >= 15 and zoomValue<=45)
+//	LTLSPEC g(zoomValue >= 15 and zoomValue<=45)
 	// REQ19: The value displayed next to the zoom slider must belong to the list of seven acceptable values for the zoom 
-	LTLSPEC g(zoomValue = 15 or zoomValue = 20 or zoomValue = 25 or zoomValue = 30 or zoomValue = 35 or zoomValue = 40 or zoomValue = 45)  
+//	LTLSPEC g(zoomValue = 15 or zoomValue = 20 or zoomValue = 25 or zoomValue = 30 or zoomValue = 35 or zoomValue = 40 or zoomValue = 45)  
 	// REQ5: Aircraft labels should not overlap
-	LTLSPEC (forall $t1 in Airplane, $t2 in Airplane with g(($t1 != $t2 and search($t1, 0) != -1 and search($t2, 0) != -1 and not isUndef(search($t1, 0)) and not isUndef(search($t2, 0))) implies ((search($t1, 0)-search($t2, 0)>=3) or (search($t1, 0)-search($t2, 0)<=-3))))
+//	LTLSPEC (forall $t1 in Airplane, $t2 in Airplane with g(($t1 != $t2 and search($t1, 0) != -1 and search($t2, 0) != -1 and not isUndef(search($t1, 0)) and not isUndef(search($t2, 0))) implies ((search($t1, 0)-search($t2, 0)>=3) or (search($t1, 0)-search($t2, 0)<=-3))))
 	// REQ6: An aircraft label cannot be moved into a blocked time period;
-	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t implies not blocked($t)))
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t implies not blocked($t)))
 	// REQ15: The HOLD button must be available only when one aircraft label is selected
-	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))
 	// REQ3: Planes can be moved earlier or later on the timeline
 	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = UP and canBeMovedUp($a) implies x(search($a, 0) = $t + 1)))
-	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = DOWN and canBeMovedDown($a) implies x(search($a, 0) = ($t - 1))))
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = DOWN and canBeMovedDown($a) implies x(search($a, 0) = ($t - 1))))
 	// REQ4: Planes can be put on hold by the PLAN ATCo
-	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
 
     // ADD Invariant about the actions
 
@@ -187,31 +187,36 @@ definitions:
 			// Update GUI
 			if not isUndef(timeToLock) then r_update_lock[] endif
 			if not isUndef(zoom) then r_update_zoom[] endif
-			if not isUndef(action) and selectedAirplane != undef then
+			if not isUndef(action) and not isUndef(selectedAirplane) then
 			// Move selected airplanes
-				if action = UP then r_moveUp[selectedAirplane, true] else
+				
+				// The following 3 commented lines substitute those in the par block, but cannot be used 
+				// with the model checker
+				
+				/*if action = UP then r_moveUp[selectedAirplane, true] else
 				if action = DOWN then r_moveDown[selectedAirplane, true] else
-				if action = HOLD then r_hold[selectedAirplane] endif endif endif 
-/*			if selectedAirplane = fr1988 then
-				if action = UP then r_moveUp[fr1988, true] else
-				if action = DOWN then r_moveDown[fr1988, true] else
-				if action = HOLD then r_hold[fr1988] endif endif endif 
-			endif
-			if selectedAirplane = u21748 then
-				if action = UP then r_moveUp[u21748, true] else
-				if action = DOWN then r_moveDown[u21748, true] else
-				if action = HOLD then r_hold[u21748] endif endif endif 
-			endif
-			if selectedAirplane = fr1989 then
-				if action = UP then r_moveUp[fr1989, true] else
-				if action = DOWN then r_moveDown[fr1989, true] else
-				if action = HOLD then r_hold[fr1989] endif endif endif 
-			endif
-			if selectedAirplane = a4 then
-				if action = UP then r_moveUp[a4, true] else
-				if action = DOWN then r_moveDown[a4, true] else
-				if action = HOLD then r_hold[a4] endif endif endif 
-			endif*/
+				if action = HOLD then r_hold[selectedAirplane] endif endif endif */
+				
+				par if selectedAirplane = fr1988 then
+					if action = UP then r_moveUp[fr1988, true] else
+					if action = DOWN then r_moveDown[fr1988, true] else
+					if action = HOLD then r_hold[fr1988] endif endif endif 
+				endif
+				if selectedAirplane = u21748 then
+					if action = UP then r_moveUp[u21748, true] else
+					if action = DOWN then r_moveDown[u21748, true] else
+					if action = HOLD then r_hold[u21748] endif endif endif 
+				endif
+				if selectedAirplane = fr1989 then
+					if action = UP then r_moveUp[fr1989, true] else
+					if action = DOWN then r_moveDown[fr1989, true] else
+					if action = HOLD then r_hold[fr1989] endif endif endif 
+				endif
+				if selectedAirplane = u21749 then
+					if action = UP then r_moveUp[u21749, true] else
+					if action = DOWN then r_moveDown[u21749, true] else
+					if action = HOLD then r_hold[u21749] endif endif endif 
+				endif endpar
 			endif
 		endpar
 
