@@ -1,10 +1,13 @@
 // ABZ 2023 - fMVC
+// - make use of undef instead of NONE for actions
+// at every time one action is def the others are all undef 
+// TODO add the invariant
 
-asm aman0
+asm aman0_wActionUndef
 
-import StandardLibrary
-import CTLLibrary
-import LTLLibrary
+import ../StandardLibrary
+import ../CTLLibrary
+import ../LTLLibrary
 export *
 
 signature:
@@ -14,7 +17,7 @@ signature:
 	abstract domain Airplane
 	enum domain Status = {UNSTABLE, STABLE, FREEZE}
 	enum domain Color = {YELLOW, CYAN, WHITE}
-	enum domain PTCOAction = {UP, DOWN, NONE, HOLD}
+	enum domain PTCOAction = {UP, DOWN, HOLD}
 	
 	// FUNCTIONS
 	// Landing sequence: it should be bijective partially defined
@@ -25,9 +28,11 @@ signature:
 	
 	// Interaction with the GUI
 	monitored zoom: ZoomValue	
-	monitored selectedAirplane : Airplane
 	monitored action: PTCOAction
 	monitored timeToLock: TimeSlot
+
+	monitored selectedAirplane : Airplane
+
 	
 	controlled blocked: TimeSlot -> Boolean	
 	controlled zoomValue : ZoomValue
@@ -154,8 +159,7 @@ definitions:
 		
 	// Update the locks depending on user input
 	rule r_update_lock =
-		if not isUndef(timeToLock) then
-			if isUndef(landingSequence(timeToLock)) then blocked(timeToLock) := not (blocked(timeToLock)) endif endif
+		if isUndef(landingSequence(timeToLock)) then blocked(timeToLock) := not (blocked(timeToLock)) endif
 			     
 	// INVARIANTS AND PROPERTIES
 	// REQ16: The zoom value cannot be bigger than 45 and smaller than 15
@@ -174,13 +178,15 @@ definitions:
 	// REQ4: Planes can be put on hold by the PLAN ATCo
 	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
 
+    // ADD Invariant about the actions
+
 	// MAIN RULE
 	main rule r_Main =
 		par		
 			// Update GUI
-			if action = NONE then r_update_lock[] endif
-			r_update_zoom[]
-			
+			if not isUndef(timeToLock) then r_update_lock[] endif
+			if not isUndef(zoom) then r_update_zoom[] endif
+			if not isUndef(action) then par
 			// Move airplanes
 			if selectedAirplane = fr1988 then
 				if action = UP then r_moveUp[fr1988, true] else
@@ -202,6 +208,7 @@ definitions:
 				if action = DOWN then r_moveDown[a4, true] else
 				if action = HOLD then r_hold[a4] endif endif endif 
 			endif
+			endpar endif
 		endpar
 
 // INITIAL STATE
@@ -210,7 +217,6 @@ default init s0:
 										   	   if $t = 2 then u21748 else 
 										   	   undef endif endif
 	function zoomValue = 30
-	function action = NONE
 	function selectedAirplane = undef
 	function statusOutput($t in Airplane) = if $t = fr1988 then UNSTABLE else if $t = u21748 then FREEZE else STABLE endif endif	
 	function landingSequenceColor($t in TimeSlot) = if $t = 5 then YELLOW else

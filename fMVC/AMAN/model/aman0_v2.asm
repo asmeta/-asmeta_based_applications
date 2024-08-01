@@ -1,7 +1,8 @@
 // ABZ 2023 - fMVC
-// make use of undef instead of NONE for actions
-// at every time one action is def the otehrs are all undef 
-// use of selected
+// - make use of undef instead of NONE for actions
+//   at every time one action is def the others are all undef 
+// - use of selected
+// - search returns -1 if plane is not found (to check if it is in the domain?)
 // TODO add the invariant
 
 asm aman0_v2

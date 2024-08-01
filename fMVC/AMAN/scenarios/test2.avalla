@@ -1,6 +1,6 @@
 scenario test2
 
-load ./model/aman2.asm
+load ../model/aman2.asm
 
 //// test name test@test2
 //// generated for (test goal): test2: NULL

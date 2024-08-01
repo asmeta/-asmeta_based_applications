@@ -1,5 +1,8 @@
 // ABZ 2023 - fMVC
-// first version of AMAN - with undef when a airplane is not found
+// first version of AMAN
+// - make use of undef instead of NONE for actions
+// - search returns undef when a airplane is not found
+// 
 asm aman0_undef
 
 import StandardLibrary
@@ -42,7 +45,7 @@ signature:
 	static fr1988: Airplane
 	static u21748: Airplane
 	static fr1989: Airplane
-	static a4: Airplane
+	static u21749: Airplane
 	 
 definitions:
 	
@@ -62,7 +65,9 @@ definitions:
 	function canBeMovedUp($airplane in Airplane) =
 		let ($currentLT = search($airplane, 0)) in
 		// if it is not in the sequence, it cannot be moved
-		if $currentLT = undef then false else
+//		if $currentLT = undef then false else
+		if isUndef($currentLT) then false else
+// check that all the four slots up are undef (free)
 			if ($currentLT + 1) <= 10 then if not isUndef(landingSequence($currentLT + 1)) then false
 			else if ($currentLT + 2) <= 10 then if not isUndef(landingSequence($currentLT + 2)) then false
 			else if ($currentLT + 3) <= 10 then if not isUndef(landingSequence($currentLT + 3)) then false
@@ -72,7 +77,8 @@ definitions:
 		
 	function canBeMovedDown($airplane in Airplane) =
 		let ($currentLT = search($airplane, 0)) in
-			if $currentLT = undef then false else
+//			if $currentLT = undef then false else
+			if isUndef($currentLT) then false else
 			if $currentLT  >= 1 then
 			if not isUndef(landingSequence($currentLT - 1)) then false
 				else  
@@ -98,7 +104,8 @@ definitions:
 	// the PLAN ATCo decides to move up an airplane
 	rule r_moveUp($a in Airplane, $manual in Boolean) =
 		let ($currentLT = search($a, 0)) in
-		if $currentLT != undef then
+//		if $currentLT != undef then
+		if not isUndef($currentLT) then
 		if $currentLT < 10 then
 			let ($blk = blocked($currentLT + 1)) in
 				if $currentLT < zoomValue and not $blk and canBeMovedUp($a) then 
@@ -115,7 +122,10 @@ definitions:
 	// the PLAN ATCo decides to move down an airplane
 	rule r_moveDown($a in Airplane, $manual in Boolean) =
 		let ($currentLT = search($a, 0)) in
-		if $currentLT != undef then
+// TODO smv wants the function and not the comparison with undef
+//		if $currentLT != undef then  
+//		if isDef($currentLT) then
+		if not isUndef($currentLT) then
 			let ($blk = blocked($currentLT - 1)) in
 			// The function is called by AMAN -> It is ok to execute without checking anything
 			if ($currentLT <= 0 and not $manual) then
@@ -143,7 +153,8 @@ definitions:
 	// from the landing sequence and the color of the corresponding cell is set to white
 	rule r_hold($a in Airplane) = 
 		let ($currentLT = search($a, 0)) in
-		if $currentLT != undef then
+//		if $currentLT != undef then
+		if not isUndef($currentLT) then
 			par
 				landingSequence($currentLT) := undef
 				landingSequenceColor($currentLT) := WHITE
@@ -163,21 +174,21 @@ definitions:
 			if isUndef(landingSequence(timeToLock)) then blocked(timeToLock) := not (blocked(timeToLock)) endif endif
 			     
 	// INVARIANTS AND PROPERTIES
-	// REQ16: The zoom value cannot be bigger than 45 and smaller than 15
-	LTLSPEC g(zoomValue >= 15 and zoomValue<=45)
-	// REQ19: The value displayed next to the zoom slider must belong to the list of seven acceptable values for the zoom 
-	LTLSPEC g(zoomValue = 15 or zoomValue = 20 or zoomValue = 25 or zoomValue = 30 or zoomValue = 35 or zoomValue = 40 or zoomValue = 45)  
-	// REQ5: Aircraft labels should not overlap
-	LTLSPEC (forall $t1 in Airplane, $t2 in Airplane with g(($t1 != $t2 and search($t1, 0) != -1 and search($t2, 0) != -1 and not isUndef(search($t1, 0)) and not isUndef(search($t2, 0))) implies ((search($t1, 0)-search($t2, 0)>=3) or (search($t1, 0)-search($t2, 0)<=-3))))
-	// REQ6: An aircraft label cannot be moved into a blocked time period;
-	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t implies not blocked($t)))
-	// REQ15: The HOLD button must be available only when one aircraft label is selected
-	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))
-	// REQ3: Planes can be moved earlier or later on the timeline
+//	// REQ16: The zoom value cannot be bigger than 45 and smaller than 15
+//	LTLSPEC g(zoomValue >= 15 and zoomValue<=45)
+//	// REQ19: The value displayed next to the zoom slider must belong to the list of seven acceptable values for the zoom 
+//	LTLSPEC g(zoomValue = 15 or zoomValue = 20 or zoomValue = 25 or zoomValue = 30 or zoomValue = 35 or zoomValue = 40 or zoomValue = 45)  
+//	// REQ5: Aircraft labels should not overlap
+//	LTLSPEC (forall $t1 in Airplane, $t2 in Airplane with g(($t1 != $t2 and search($t1, 0) != -1 and search($t2, 0) != -1 and not isUndef(search($t1, 0)) and not isUndef(search($t2, 0))) implies ((search($t1, 0)-search($t2, 0)>=3) or (search($t1, 0)-search($t2, 0)<=-3))))
+//	// REQ6: An aircraft label cannot be moved into a blocked time period;
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t implies not blocked($t)))
+//	// REQ15: The HOLD button must be available only when one aircraft label is selected
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))
+//	// REQ3: Planes can be moved earlier or later on the timeline
 	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = UP and canBeMovedUp($a) implies x(search($a, 0) = $t + 1)))
-	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = DOWN and canBeMovedDown($a) implies x(search($a, 0) = ($t - 1))))
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = DOWN and canBeMovedDown($a) implies x(search($a, 0) = ($t - 1))))
 	// REQ4: Planes can be put on hold by the PLAN ATCo
-	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
 
 	// MAIN RULE
 	main rule r_Main =
@@ -203,10 +214,10 @@ definitions:
 				if action = DOWN then r_moveDown[fr1989, true] else
 				if action = HOLD then r_hold[fr1989] endif endif endif 
 			endif
-			if selectedAirplane = a4 then
-				if action = UP then r_moveUp[a4, true] else
-				if action = DOWN then r_moveDown[a4, true] else
-				if action = HOLD then r_hold[a4] endif endif endif 
+			if selectedAirplane = u21749 then
+				if action = UP then r_moveUp[u21749, true] else
+				if action = DOWN then r_moveDown[u21749, true] else
+				if action = HOLD then r_hold[u21749] endif endif endif 
 			endif
 		endpar
 

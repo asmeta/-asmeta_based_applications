@@ -1,7 +1,7 @@
 // ABZ 2023 - fMVC
 // AMAN1 WITHOUT MAIN
 // AND NO INITIAL STATE
-// NO LONGER NEEDED
+// NO LONGER NEEDED (asm allows importing an asm with main)
 module aman1_wom
 
 import StandardLibrary
