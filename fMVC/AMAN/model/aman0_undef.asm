@@ -1,8 +1,9 @@
 // ABZ 2023 - fMVC
 // first version of AMAN
-// - make use of undef instead of NONE for actions
-// - search returns undef when a airplane is not found
-// 
+// - make use of undef instead of NONE for actions (correct) 
+// - search returns undef when a airplane is not found (correct)
+// problem with undef is that it traslates to null sometimes in NuSMV
+
 asm aman0_undef
 
 import StandardLibrary
@@ -17,7 +18,7 @@ signature:
 	abstract domain Airplane
 	enum domain Status = {UNSTABLE, STABLE, FREEZE}
 	enum domain Color = {YELLOW, CYAN, WHITE}
-	enum domain PTCOAction = {UP, DOWN, NONE, HOLD}
+	enum domain PTCOAction = {UP, DOWN, HOLD}
 	
 	// FUNCTIONS
 	// Landing sequence: it should be bijective partially defined
@@ -55,7 +56,7 @@ definitions:
 	
 	// FUNCTION DEFINITIONS
 	// The function searches the airplane with the specified landing time
-	// return -1 if $a is not found in the landing sequence
+	// return undef if $a is not found in the landing sequence
 	function search($a in Airplane, $t in TimeSlot) = 
 		if landingSequence($t) = $a then $t else 
 		if $t >= 10 then undef else 
@@ -65,7 +66,7 @@ definitions:
 	function canBeMovedUp($airplane in Airplane) =
 		let ($currentLT = search($airplane, 0)) in
 		// if it is not in the sequence, it cannot be moved
-//		if $currentLT = undef then false else
+//		if $currentLT = undef then false else // use direct of undef as a term instead of a function
 		if isUndef($currentLT) then false else
 // check that all the four slots up are undef (free)
 			if ($currentLT + 1) <= 10 then if not isUndef(landingSequence($currentLT + 1)) then false
@@ -194,7 +195,7 @@ definitions:
 	main rule r_Main =
 		par		
 			// Update GUI
-			if action = NONE then r_update_lock[] endif
+			if action = undef then r_update_lock[] endif
 			r_update_zoom[]
 			
 			// Move airplanes
@@ -227,7 +228,7 @@ default init s0:
 										   	   if $t = 2 then u21748 else 
 										   	   undef endif endif
 	function zoomValue = 30
-	function action = NONE
+	function action = undef
 	function selectedAirplane = undef
 	function statusOutput($t in Airplane) = if $t = fr1988 then UNSTABLE else if $t = u21748 then FREEZE else STABLE endif endif	
 	function landingSequenceColor($t in TimeSlot) = if $t = 5 then YELLOW else
