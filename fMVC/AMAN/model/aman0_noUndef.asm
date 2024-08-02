@@ -55,7 +55,7 @@ signature:
 definitions:
 	
 	// DOMAIN DEFINITIONS
-	domain TimeSlot = {0 : 10}
+	domain TimeSlot = {0 : 20}
 	domain ZoomValue = {15 : 45}
 	
 	
@@ -66,8 +66,8 @@ definitions:
 	// to be used only with $t = 0
 	function search($a in Airplane, $t in TimeSlot) = 
 		if landingSequence($t) = $a then $t else 
-		if $t > 10 then -2147483647 else 
-		if $t < 10 then search($a, $t+1) 
+		if $t > 20 then -2147483647 else 
+		if $t < 20 then search($a, $t+1) 
 		else -2147483647 endif endif endif
 // alternatively without the recursion:
 //		if landingSequence(0) = $a then 0 else 
@@ -94,7 +94,7 @@ definitions:
 		    // plane found ?
 			if $currentLT = -2147483647 then false else
 			    // check the slots up
-				if ($currentLT + 1) <= 10 then 
+				if ($currentLT + 1) <= 20 then 
 					if not isUndef(landingSequence($currentLT + 1)) then false
 				else if ($currentLT + 2) <= 10 then 
 					if not isUndef(landingSequence($currentLT + 2)) then false
@@ -186,8 +186,14 @@ definitions:
 	// Update the locks depending on user input
 	rule r_update_lock =
 		if isUndef(landingSequence(timeToLock)) then blocked(timeToLock) := not (blocked(timeToLock)) endif
+
+
+	// INVARIANTS AND PROPERTIES    
+    // INVARIANTS over the inputs, usd INVAR
+    // ADD Invariant about the actions
+	INVAR (not isUndef(timeToLock) implies isUndef(action)) 
+                    and (not isUndef(action) implies isUndef(timeToLock)) 
 			     
-	// INVARIANTS AND PROPERTIES
 	// REQ16: The zoom value cannot be bigger than 45 and smaller than 15
 	// proved with 10
 //	LTLSPEC g(zoomValue >= 15 and zoomValue<=45)
@@ -206,8 +212,6 @@ definitions:
 //	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = DOWN and canBeMovedDown($a) implies x(search($a, 0) = ($t - 1))))
 	// REQ4: Planes can be put on hold by the PLAN ATCo
 //	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
-
-    // ADD Invariant about the actions
 
 	// MAIN RULE
 	main rule r_Main =
