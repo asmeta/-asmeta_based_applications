@@ -4,8 +4,11 @@
 // - use of selectedAirplane
 // - search returns -2147483647 if plane is not found (to check if it is in the domain?) (instead of undef)
 //    why -2147483647? because it is the constant used by AsmetaSMV for undef
-//
-asm aman0_noUndef
+// 
+
+// PROVA CON TIMESLOT 5
+
+asm aman0_noUndef2
 
 import StandardLibrary
 import CTLLibrary
@@ -55,7 +58,7 @@ signature:
 definitions:
 	
 	// DOMAIN DEFINITIONS
-	domain TimeSlot = {0 : 14}
+	domain TimeSlot = {0 : 5}
 	domain ZoomValue = {15 : 45}
 	
 	
@@ -66,8 +69,8 @@ definitions:
 	// to be used only with $t = 0
 	function search($a in Airplane, $t in TimeSlot) = 
 		if landingSequence($t) = $a then $t else 
-		if $t > 14 then -2147483647 else 
-		if $t < 14 then search($a, $t+1) 
+		if $t > 5 then -2147483647 else 
+		if $t < 5 then search($a, $t+1) 
 		else -2147483647 endif endif endif
 // alternatively without the recursion:
 //		if landingSequence(0) = $a then 0 else 
@@ -89,21 +92,22 @@ definitions:
 //		-2147483647 
 //		endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif
 	
+	// moved up +1
 	function canBeMovedUp($airplane in Airplane) =
 		let ($currentLT = search($airplane, 0)) in
 		    // plane found ?
 			if $currentLT = -2147483647 then false else
 			    // check the slots up
-				if ($currentLT + 1) <= 14 then 
+				if ($currentLT + 1) <= 5 then 
 					if not isUndef(landingSequence($currentLT + 1)) then false
-				else if ($currentLT + 2) <= 14 then 
+				else if ($currentLT + 2) <= 5 then 
 					if not isUndef(landingSequence($currentLT + 2)) then false
-				else if ($currentLT + 3) <= 14 then 
+				else if ($currentLT + 3) <= 5 then 
 					if not isUndef(landingSequence($currentLT + 3)) then false
-				else if ($currentLT + 4) <= 14 then 
+				else if ($currentLT + 4) <= 5 then 
 					if not isUndef(landingSequence($currentLT + 4)) then false 
 				else true 
-			endif endif endif endif endif endif endif else true endif endif
+			endif endif endif endif endif endif endif endif endif
 			endlet 
 		
 	function canBeMovedDown($airplane in Airplane) =
@@ -125,7 +129,7 @@ definitions:
 	// the PLAN ATCo decides to move up an airplane
 	rule r_moveUp($a in Airplane, $manual in Boolean) =
 		let ($currentLT = search($a, 0)) in
-		if $currentLT != -2147483647 and $currentLT < 14 then
+		if $currentLT != -2147483647 and $currentLT < 5 then
 			let ($blk = blocked($currentLT + 1)) in
 				if $currentLT < zoomValue and not $blk and canBeMovedUp($a) then 
 				par  
@@ -204,7 +208,7 @@ definitions:
 	// proved
 	//LTLSPEC (forall $t1 in Airplane, $t2 in Airplane with g(($t1 != $t2 and search($t1, 0) != -1 and search($t2, 0) != -1 and not isUndef(search($t1, 0)) and not isUndef(search($t2, 0))) implies ((search($t1, 0)-search($t2, 0)>=3) or (search($t1, 0)-search($t2, 0)<=-3))))
 	// REQ6: An aircraft label cannot be moved into a blocked time period;
-	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t implies not blocked($t)))
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t implies not blocked($t)))
 	// REQ15: The HOLD button must be available only when one aircraft label is selected
 //	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))
 	// REQ3: Planes can be moved earlier or later on the timeline
@@ -212,6 +216,9 @@ definitions:
 //	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = DOWN and canBeMovedDown($a) implies x(search($a, 0) = ($t - 1))))
 	// REQ4: Planes can be put on hold by the PLAN ATCo
 //	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
+
+	CTLSPEC (forall $a in Airplane with ag(search($a, 0) = 0 implies not canBeMovedDown($a)))
+	CTLSPEC (forall $a in Airplane with ag(search($a, 0) = 0 implies not canBeMovedUp($a)))
 
 	// MAIN RULE
 	main rule r_Main =
