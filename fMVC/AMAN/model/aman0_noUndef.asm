@@ -103,7 +103,7 @@ definitions:
 				else if ($currentLT + 4) <= 14 then 
 					if not isUndef(landingSequence($currentLT + 4)) then false 
 				else true 
-			endif endif endif endif endif endif endif else true endif endif
+			endif endif endif endif endif endif endif endif endif
 			endlet 
 		
 	function canBeMovedDown($airplane in Airplane) =

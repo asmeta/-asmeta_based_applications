@@ -6,7 +6,7 @@
 //    why -2147483647? because it is the constant used by AsmetaSMV for undef
 // 
 
-// PROVA CON TIMESLOT 5
+// VERSION FOR MODEL CHECKING
 
 asm aman0_noUndef2
 
@@ -44,8 +44,8 @@ signature:
 	controlled landingSequenceColor: TimeSlot -> Color
 	
 	// search the position of an airplane
-	// (to call with timeslot = 0 
-	static search: Prod(Airplane,TimeSlot) -> TimeSlot
+	// position
+	static position: Airplane -> TimeSlot
 	// Function checking whether an airplane can be moved in the new position
 	static canBeMovedUp: Airplane -> Boolean
 	static canBeMovedDown: Airplane -> Boolean
@@ -58,7 +58,7 @@ signature:
 definitions:
 	
 	// DOMAIN DEFINITIONS
-	domain TimeSlot = {0 : 5}
+	domain TimeSlot = {0 : 15}
 	domain ZoomValue = {15 : 45}
 	
 	
@@ -67,52 +67,49 @@ definitions:
 	// The function searches the airplane with the specified landing time
 	// return -1 if $a is not found in the landing sequence
 	// to be used only with $t = 0
-	function search($a in Airplane, $t in TimeSlot) = 
-		if landingSequence($t) = $a then $t else 
-		if $t > 5 then -2147483647 else 
-		if $t < 5 then search($a, $t+1) 
-		else -2147483647 endif endif endif
+	function position($a in Airplane) = 
 // alternatively without the recursion:
-//		if landingSequence(0) = $a then 0 else 
-//		if landingSequence(1) = $a then 1 else 
-//		if landingSequence(2) = $a then 2 else 
-//		if landingSequence(3) = $a then 3 else 
-//		if landingSequence(4) = $a then 4 else 
-//		if landingSequence(5) = $a then 5 else 
-//		if landingSequence(6) = $a then 6 else 
-//		if landingSequence(7) = $a then 7 else 
-//		if landingSequence(8) = $a then 8 else 
-//		if landingSequence(9) = $a then 9 else 
-//		if landingSequence(10) = $a then 10 else 
-//		if landingSequence(11) = $a then 11 else 
-//		if landingSequence(12) = $a then 12 else 
-//		if landingSequence(13) = $a then 13 else 
-//		if landingSequence(14) = $a then 14 else 
-//		if landingSequence(15) = $a then 15 else 
-//		-2147483647 
-//		endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif endif
+		if landingSequence(0) = $a then 0 else 
+		if landingSequence(1) = $a then 1 else 
+		if landingSequence(2) = $a then 2 else 
+		if landingSequence(3) = $a then 3 else 
+		if landingSequence(4) = $a then 4 else 
+		if landingSequence(5) = $a then 5 else 
+		if landingSequence(6) = $a then 6 else 
+		if landingSequence(7) = $a then 7 else 
+		if landingSequence(8) = $a then 8 else 
+		if landingSequence(9) = $a then 9 else 
+		if landingSequence(10) = $a then 10 else 
+		if landingSequence(11) = $a then 11 else 
+		if landingSequence(12) = $a then 12 else 
+		if landingSequence(13) = $a then 13 else 
+		if landingSequence(14) = $a then 14 else 
+		if landingSequence(15) = $a then 15 else 
+		-2147483647 
+		endif endif endif endif endif endif 
+		endif endif endif endif endif 
+		endif endif endif 
+		endif endif
 	
 	// moved up +1
+	// call only when the airplane if found (check before)
 	function canBeMovedUp($airplane in Airplane) =
-		let ($currentLT = search($airplane, 0)) in
-		    // plane found ?
-			if $currentLT = -2147483647 then false else
-			    // check the slots up
-				if ($currentLT + 1) <= 5 then 
+		let ($currentLT = position($airplane)) in
+			 // check the slots up
+			if ($currentLT + 1) <= 15 then 
 					if not isUndef(landingSequence($currentLT + 1)) then false
-				else if ($currentLT + 2) <= 5 then 
+				else if ($currentLT + 2) <= 15 then 
 					if not isUndef(landingSequence($currentLT + 2)) then false
-				else if ($currentLT + 3) <= 5 then 
+				else if ($currentLT + 3) <= 15 then 
 					if not isUndef(landingSequence($currentLT + 3)) then false
-				else if ($currentLT + 4) <= 5 then 
+				else if ($currentLT + 4) <= 15 then 
 					if not isUndef(landingSequence($currentLT + 4)) then false 
 				else true 
-			endif endif endif endif endif endif endif endif endif
+			endif endif endif endif endif endif endif else false endif
 			endlet 
 		
 	function canBeMovedDown($airplane in Airplane) =
-		let ($currentLT = search($airplane, 0)) in
-			if $currentLT = -2147483647 then false else
+		let ($currentLT = position($airplane)) in
 				if ($currentLT - 1) >= 0 then 
 					if not isUndef(landingSequence($currentLT - 1)) then false
 				else if ($currentLT - 2) >= 0 then 
@@ -122,14 +119,16 @@ definitions:
 				else if ($currentLT - 4) >= 0 then 
 					if not isUndef(landingSequence($currentLT - 4)) then false 
 				else true 
-			endif endif endif endif endif endif endif endif endif
+			endif endif endif endif endif endif endif else false endif
 		endlet
 
 	// RULE DEFINITIONS
 	// the PLAN ATCo decides to move up an airplane
-	rule r_moveUp($a in Airplane, $manual in Boolean) =
-		let ($currentLT = search($a, 0)) in
-		if $currentLT != -2147483647 and $currentLT < 5 then
+	// always manual move (in this level)
+	//
+	rule r_moveUp($a in Airplane) =
+		let ($currentLT = position($a)) in
+		if $currentLT != -2147483647 and $currentLT < 15 then
 			let ($blk = blocked($currentLT + 1)) in
 				if $currentLT < zoomValue and not $blk and canBeMovedUp($a) then 
 				par  
@@ -143,36 +142,24 @@ definitions:
 		endif endlet 
 			
 	// the PLAN ATCo decides to move down an airplane
-	rule r_moveDown($a in Airplane, $manual in Boolean) =
-		let ($currentLT = search($a, 0)) in
-		let ($blk = blocked($currentLT - 1)) in
-		if $currentLT != -2147483647 then
-			// The function is called by AMAN -> It is ok to execute without checking anything
-			if ($currentLT <= 0 and not $manual) then
-				par
-					landingSequence($currentLT):= undef
-					landingSequenceColor($currentLT) := WHITE
-				endpar
-			else
-				if  $currentLT >= 1 and not $blk and not $manual then
-				par
-					landingSequence($currentLT - 1):= $a
-					landingSequence($currentLT):= undef
-					landingSequenceColor($currentLT - 1) := landingSequenceColor($currentLT)
-					landingSequenceColor($currentLT) := WHITE
-				endpar				
-				else if $currentLT >= 1 and not $blk and canBeMovedDown($a) then 
+	// always manual change
+	rule r_moveDown($a in Airplane) =
+		let ($currentLT = position($a)) in
+		// The function is called by AMAN -> It is ok to execute without checking anything
+		if $currentLT != -2147483647 and $currentLT > 0 then
+		   let ($blk = blocked($currentLT - 1)) in
+				if not $blk and canBeMovedDown($a) then 
 				par  
 					landingSequence($currentLT - 1):= $a
 					landingSequence($currentLT):= undef
 					landingSequenceColor($currentLT - 1) := landingSequenceColor($currentLT)
 					landingSequenceColor($currentLT) := WHITE
-				endpar endif endif endif endif endlet endlet
+				endpar endif endlet endif endlet
 						
 	// the PLAN ATCo decides to put an airplane on hold -> The airplane has to be removed 
 	// from the landing sequence and the color of the corresponding cell is set to white
 	rule r_hold($a in Airplane) = 
-		let ($currentLT = search($a, 0)) in
+		let ($currentLT = position($a)) in
 		if $currentLT != -2147483647 then
 			par
 				landingSequence($currentLT) := undef
@@ -199,7 +186,7 @@ definitions:
                     and (not isUndef(action) implies isUndef(timeToLock)) 
 			     
 	// REQ16: The zoom value cannot be bigger than 45 and smaller than 15
-	// proved with 10
+	// proved with 
 //	LTLSPEC g(zoomValue >= 15 and zoomValue<=45)
 	// REQ19: The value displayed next to the zoom slider must belong to the list of seven acceptable values for the zoom 
 // proved (10)
@@ -208,17 +195,17 @@ definitions:
 	// proved
 	//LTLSPEC (forall $t1 in Airplane, $t2 in Airplane with g(($t1 != $t2 and search($t1, 0) != -1 and search($t2, 0) != -1 and not isUndef(search($t1, 0)) and not isUndef(search($t2, 0))) implies ((search($t1, 0)-search($t2, 0)>=3) or (search($t1, 0)-search($t2, 0)<=-3))))
 	// REQ6: An aircraft label cannot be moved into a blocked time period;
-//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t implies not blocked($t)))
+	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(position($a) = $t implies not blocked($t)))
 	// REQ15: The HOLD button must be available only when one aircraft label is selected
-//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(position($a) = $t and isUndef(selectedAirplane) and action = HOLD implies x(position($a) = $t)))
 	// REQ3: Planes can be moved earlier or later on the timeline
-//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = UP and canBeMovedUp($a) implies x(search($a, 0) = $t + 1)))
-//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = DOWN and canBeMovedDown($a) implies x(search($a, 0) = ($t - 1))))
+	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(position($a) = $t and selectedAirplane=$a and action = UP and canBeMovedUp($a) implies x(position($a) = $t + 1)))
+	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(position($a) = $t and selectedAirplane=$a and action = DOWN and canBeMovedDown($a) implies x(position($a) = ($t - 1))))
 	// REQ4: Planes can be put on hold by the PLAN ATCo
-//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(position($a) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
 
-	CTLSPEC (forall $a in Airplane with ag(search($a, 0) = 0 implies not canBeMovedDown($a)))
-	CTLSPEC (forall $a in Airplane with ag(search($a, 0) = 0 implies not canBeMovedUp($a)))
+//	CTLSPEC (forall $a in Airplane with ag(position($a) = 0 implies not canBeMovedDown($a)))
+//	CTLSPEC (forall $a in Airplane with ag(position($a) = 0 implies not canBeMovedUp($a)))
 
 	// MAIN RULE
 	main rule r_Main =
@@ -237,23 +224,23 @@ definitions:
 				if action = HOLD then r_hold[selectedAirplane] endif endif endif */
 				
 				par if selectedAirplane = fr1988 then
-					if action = UP then r_moveUp[fr1988, true] else
-					if action = DOWN then r_moveDown[fr1988, true] else
+					if action = UP then r_moveUp[fr1988] else
+					if action = DOWN then r_moveDown[fr1988] else
 					if action = HOLD then r_hold[fr1988] endif endif endif 
 				endif
 				if selectedAirplane = u21748 then
-					if action = UP then r_moveUp[u21748, true] else
-					if action = DOWN then r_moveDown[u21748, true] else
+					if action = UP then r_moveUp[u21748] else
+					if action = DOWN then r_moveDown[u21748] else
 					if action = HOLD then r_hold[u21748] endif endif endif 
 				endif
 				if selectedAirplane = fr1989 then
-					if action = UP then r_moveUp[fr1989, true] else
-					if action = DOWN then r_moveDown[fr1989, true] else
+					if action = UP then r_moveUp[fr1989] else
+					if action = DOWN then r_moveDown[fr1989] else
 					if action = HOLD then r_hold[fr1989] endif endif endif 
 				endif
 				if selectedAirplane = u21749 then
-					if action = UP then r_moveUp[u21749, true] else
-					if action = DOWN then r_moveDown[u21749, true] else
+					if action = UP then r_moveUp[u21749] else
+					if action = DOWN then r_moveDown[u21749] else
 					if action = HOLD then r_hold[u21749] endif endif endif 
 				endif endpar
 			endif
