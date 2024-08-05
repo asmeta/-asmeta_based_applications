@@ -95,11 +95,14 @@ definitions:
 	// call only when the airplane if found (check before)
 	function canBeMovedUp($airplane in Airplane) =
 		let ($currentLT = position($airplane)) in
-			 // check the slots up
-			if ($currentLT + 1) <= 15 then 
-				let ($blk = blocked($currentLT + 1)) in
-					if ($blk) then false 
+			 // check if it is the last slot
+			if $currentLT >= 15 then false
+			else
+			// check if the position +1 is blocked 
+			let ($blk = blocked($currentLT + 1)) in
+					if $blk then false 
 					else
+					// check if the other positions are free
 						if not isUndef(landingSequence($currentLT + 1)) then false
 						else if ($currentLT + 2) <= 15 then 
 							if not isUndef(landingSequence($currentLT + 2)) then false
@@ -110,17 +113,18 @@ definitions:
 										else true 
 										endif endif endif endif endif endif endif endif
 				endlet 
-			else
-				false
 			endif 
 		endlet 
 		
 		
 	function canBeMovedDown($airplane in Airplane) =
 		let ($currentLT = position($airplane)) in
-			if ($currentLT - 1) >= 0 then 
+			// check if it is the first position
+			if $currentLT = 0 then false
+			else
+				// check if the target position is blocked
 				let ($blk = blocked($currentLT - 1)) in
-					if ($blk) then false 
+					if  $blk then false 
 					else				
 						if not isUndef(landingSequence($currentLT - 1)) then false
 						else if ($currentLT - 2) >= 0 then 
@@ -133,7 +137,7 @@ definitions:
 						endif endif endif endif endif endif endif 
 					endif
 				endlet
-			 else false endif
+			 endif
 		endlet
 
 	// RULE DEFINITIONS
@@ -142,7 +146,7 @@ definitions:
 	//
 	rule r_moveUp($a in Airplane) =
 		let ($currentLT = position($a)) in
-		if $currentLT != -2147483647 and $currentLT < 15 then
+		if $currentLT != -2147483647 then
 			if $currentLT < zoomValue and canBeMovedUp($a) then 
 			par  
 				landingSequence($currentLT + 1):= $a
@@ -158,7 +162,7 @@ definitions:
 	rule r_moveDown($a in Airplane) =
 		let ($currentLT = position($a)) in
 		// The function is called by AMAN -> It is ok to execute without checking anything
-		if $currentLT != -2147483647 and $currentLT > 0 then
+		if $currentLT != -2147483647 then
 			if canBeMovedDown($a) then 
 			par  
 				landingSequence($currentLT - 1):= $a
