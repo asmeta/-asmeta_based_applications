@@ -1,4 +1,4 @@
---file C:\Users\angel\codicefromrepos\ricerca\asmeta\asmeta_based_applications\fMVC\AMAN\model\aman0_noUndef2.smv
+--file C:\Users\angel\codicefromrepos\ricerca\asmeta\asmeta_based_applications\fMVC\AMAN\model\aman0_noUndefMC.smv
 -- options: flatten? false
 MODULE main
 	VAR
@@ -828,7 +828,7 @@ MODULE main
 				(landingSequence_0 = U21749) & 0 in {-2147483647, 0, 1, 10, 11, 12, 13, 14, 15, 2, 3, 4, 5, 6, 7, 8, 9}: 0;
 				TRUE: -2147483647;
 			esac;
-	CONSTANTS COLOR_UNDEF, CYAN, WHITE, YELLOW, STATUS_UNDEF, FREEZE, STABLE, UNSTABLE, PTCOACTION_UNDEF, DOWN, HOLD, UP, FR1988, U21748, FR1989, U21749, AIRPLANE_UNDEF;
+	CONSTANTS FR1988, U21748, FR1989, U21749, AIRPLANE_UNDEF, STATUS_UNDEF, FREEZE, STABLE, UNSTABLE, PTCOACTION_UNDEF, DOWN, HOLD, UP, COLOR_UNDEF, CYAN, WHITE, YELLOW;
 	ASSIGN
 		init(blocked_0) := FALSE;
 		init(blocked_1) := FALSE;

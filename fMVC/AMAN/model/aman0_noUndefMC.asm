@@ -8,7 +8,7 @@
 
 // VERSION FOR MODEL CHECKING
 
-asm aman0_noUndef2
+asm aman0_noUndefMC
 
 import StandardLibrary
 import CTLLibrary
