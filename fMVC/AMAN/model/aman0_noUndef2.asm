@@ -159,14 +159,13 @@ definitions:
 		let ($currentLT = position($a)) in
 		// The function is called by AMAN -> It is ok to execute without checking anything
 		if $currentLT != -2147483647 and $currentLT > 0 then
-		   let ($blk = blocked($currentLT - 1)) in
-				if not $blk and canBeMovedDown($a) then 
-				par  
-					landingSequence($currentLT - 1):= $a
-					landingSequence($currentLT):= undef
-					landingSequenceColor($currentLT - 1) := landingSequenceColor($currentLT)
-					landingSequenceColor($currentLT) := WHITE
-				endpar endif endlet endif endlet
+			if canBeMovedDown($a) then 
+			par  
+				landingSequence($currentLT - 1):= $a
+				landingSequence($currentLT):= undef
+				landingSequenceColor($currentLT - 1) := landingSequenceColor($currentLT)
+				landingSequenceColor($currentLT) := WHITE
+			endpar endif endif endlet
 						
 	// the PLAN ATCo decides to put an airplane on hold -> The airplane has to be removed 
 	// from the landing sequence and the color of the corresponding cell is set to white
