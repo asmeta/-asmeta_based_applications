@@ -61,8 +61,6 @@ definitions:
 	domain TimeSlot = {0 : 15}
 	domain ZoomValue = {15 : 45}
 	
-	
-	
 	// FUNCTION DEFINITIONS
 	// The function searches the airplane with the specified landing time
 	// return -1 if $a is not found in the landing sequence
@@ -85,7 +83,8 @@ definitions:
 		if landingSequence(13) = $a then 13 else 
 		if landingSequence(14) = $a then 14 else 
 		if landingSequence(15) = $a then 15 else 
-		-2147483647 
+		//-2147483647 
+		undef
 		endif endif endif endif endif endif 
 		endif endif endif endif endif 
 		endif endif endif 
