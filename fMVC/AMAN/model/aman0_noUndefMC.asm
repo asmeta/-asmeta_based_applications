@@ -58,7 +58,7 @@ signature:
 definitions:
 	
 	// DOMAIN DEFINITIONS
-	domain TimeSlot = {0 : 15}
+	domain TimeSlot = {0 : 20}
 	domain ZoomValue = {15 : 45}
 	
 	// FUNCTION DEFINITIONS
@@ -82,12 +82,18 @@ definitions:
 		if landingSequence(12) = $a then 12 else 
 		if landingSequence(13) = $a then 13 else 
 		if landingSequence(14) = $a then 14 else 
-		if landingSequence(15) = $a then 15 else 
+		if landingSequence(15) = $a then 15 else		
+		if landingSequence(16) = $a then 16 else 
+		if landingSequence(17) = $a then 17 else 
+		if landingSequence(18) = $a then 18 else 
+		if landingSequence(19) = $a then 19 else 
+		if landingSequence(20) = $a then 20 else 
 		//-2147483647 
 		undef
 		endif endif endif endif endif endif 
 		endif endif endif endif endif 
-		endif endif endif 
+		endif endif endif endif
+		endif endif endif endif  
 		endif endif
 	
 	// moved up +1
@@ -95,7 +101,7 @@ definitions:
 	function canBeMovedUp($airplane in Airplane) =
 		let ($currentLT = position($airplane)) in
 			 // check if it is the last slot
-			if $currentLT >= 15 then false
+			if $currentLT >= 20 then false
 			else
 			// check if the position +1 is blocked 
 			let ($blk = blocked($currentLT + 1)) in
@@ -103,11 +109,11 @@ definitions:
 					else
 					// check if the other positions are free
 						if not isUndef(landingSequence($currentLT + 1)) then false
-						else if ($currentLT + 2) <= 15 then 
+						else if ($currentLT + 2) <= 20 then 
 							if not isUndef(landingSequence($currentLT + 2)) then false
-								else if ($currentLT + 3) <= 15 then 
+								else if ($currentLT + 3) <= 20 then 
 									if not isUndef(landingSequence($currentLT + 3)) then false
-									else if ($currentLT + 4) <= 15 then 
+									else if ($currentLT + 4) <= 20 then 
 										if not isUndef(landingSequence($currentLT + 4)) then false 
 										else true 
 										endif endif endif endif endif endif endif endif
