@@ -5,18 +5,23 @@ scenario ScenarioLOCK
 load aman2.asm
 check landingSequence(2) = u21748;
 check landingSequence(5) = fr1988;
-set action := undef;
+// lock time 1
 set timeToLock := 1;
+set action := undef;
+set zoom := 30;
 step
 check blocked(1) = true;
 check blocked(0) = false;
+set action := undef;
 set timeToLock := 0;
 step
 check blocked(1) = true;
 check blocked(0) = true;
+// 
 set selectedAirplane := u21748;
 set numMoves := 1;
 set action := DOWN;
+set timeToLock := undef;
 step
 check blocked(1) = true;
 check landingSequence(2) = u21748;

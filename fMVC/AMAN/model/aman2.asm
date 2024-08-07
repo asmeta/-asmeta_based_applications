@@ -40,7 +40,7 @@ definitions:
 	function currentTimeHours = 
 		rtoi(mCurrTimeSecs / 3600) mod 24
 		
-	// Zoom changed
+	// Zoom changed (true or undef like the other actions)
 	function zoomChanged =
 		if zoom != zoomValue then true else undef endif
 	
@@ -67,7 +67,10 @@ definitions:
 		endpar
 		
 	// INVARIANTS
-	invariant inv_action over timeToLock, zoomChanged, action: (timeToLock != undef implies (zoomChanged=undef and action=undef)) and (zoomChanged != undef implies (timeToLock=undef and action=undef)) and (action != undef implies (timeToLock=undef and zoomChanged=undef)) 
+	invariant inv_action over timeToLock, zoomChanged, action: 
+		(timeToLock != undef implies (zoomChanged=undef and action=undef)) and 
+		(zoomChanged != undef implies (timeToLock=undef and action=undef)) and 
+		(action != undef implies (timeToLock=undef and zoomChanged=undef)) 
 	
 	
 	// MAIN RULE
