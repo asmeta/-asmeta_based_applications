@@ -4,11 +4,11 @@
 // - use of selectedAirplane
 // - search returns -2147483647 if plane is not found (to check if it is in the domain?) (instead of undef)
 //    why -2147483647? because it is the constant used by AsmetaSMV for undef
-// 
+// - search is non recursive (asmetasmv accepts recursive functions but it is slower).
 
 // VERSION FOR MODEL CHECKING
 
-asm aman0_noUndefMC
+asm aman0_MC
 
 import StandardLibrary
 import CTLLibrary
@@ -45,10 +45,10 @@ signature:
 	
 	// search the position of an airplane
 	// position
-	static position: Airplane -> TimeSlot
+	derived position: Airplane -> TimeSlot
 	// Function checking whether an airplane can be moved in the new position
-	static canBeMovedUp: Airplane -> Boolean
-	static canBeMovedDown: Airplane -> Boolean
+	derived canBeMovedUp: Airplane -> Boolean
+	derived canBeMovedDown: Airplane -> Boolean
 	
 	static fr1988: Airplane
 	static u21748: Airplane

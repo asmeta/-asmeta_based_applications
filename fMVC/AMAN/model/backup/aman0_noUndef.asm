@@ -9,7 +9,7 @@ asm aman0_noUndef
 
 import StandardLibrary
 import CTLLibrary
-import LTLLibrary
+import ../LTLLibrary
 export *
 
 signature:

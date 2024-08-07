@@ -2,9 +2,9 @@
 // first version of AMAN
 // - make use of undef instead of NONE for actions (correct) 
 // - search returns undef when a airplane is not found (correct)
-// problem with undef is that it traslates to null sometimes in NuSMV
+//   (problem with undef is that it traslates to null sometimes in NuSMV - see version MC for model chcking)
 
-asm aman0_undef
+asm aman0
 
 import StandardLibrary
 import CTLLibrary
@@ -38,10 +38,10 @@ signature:
 	controlled landingSequenceColor: TimeSlot -> Color
 	
 	// Recursive function
-	static search: Prod(Airplane,TimeSlot) -> TimeSlot
+	derived search: Prod(Airplane,TimeSlot) -> TimeSlot
 	// Function checking whether an airplane can be moved in the new position
-	static canBeMovedUp: Airplane -> Boolean
-	static canBeMovedDown: Airplane -> Boolean
+	derived canBeMovedUp: Airplane -> Boolean
+	derived canBeMovedDown: Airplane -> Boolean
 	
 	static fr1988: Airplane
 	static u21748: Airplane
@@ -51,7 +51,7 @@ signature:
 definitions:
 	
 	// DOMAIN DEFINITIONS
-	domain TimeSlot = {0 : 10}
+	domain TimeSlot = {0 : 20}
 	domain ZoomValue = {15 : 45}
 	
 	// FUNCTION DEFINITIONS

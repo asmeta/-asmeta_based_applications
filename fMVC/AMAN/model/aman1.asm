@@ -42,10 +42,10 @@ signature:
 	static color: Status -> Color
 	
 	// Recursive function
-	static search: Prod(Airplane,TimeSlot) -> TimeSlot
+	derived search: Prod(Airplane,TimeSlot) -> TimeSlot
 	// Function checking whether an airplane can be moved in the new position
-	static canBeMovedUp: Prod(Airplane,TimeSlot) -> Boolean
-	static canBeMovedDown: Prod(Airplane,TimeSlot) -> Boolean
+	derived canBeMovedUp: Prod(Airplane,TimeSlot) -> Boolean
+	derived canBeMovedDown: Prod(Airplane,TimeSlot) -> Boolean
 	
 	static fr1988: Airplane
 	static u21748: Airplane
