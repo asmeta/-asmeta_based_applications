@@ -3,7 +3,7 @@
 asm aman0
 
 import StandardLibrary
-import CTLlibrary
+import CTLLibrary
 
 signature:
 	// DOMAINS
@@ -47,9 +47,9 @@ signature:
 	static canBeMovedUp: Prod(Airplane,Time) -> Boolean
 	static canBeMovedDown: Prod(Airplane,Time) -> Boolean
 	
-	static a1: Airplane
-	static a2: Airplane
-	static a3: Airplane
+	static fr1988: Airplane
+	static u21748: Airplane
+	static fr1989: Airplane
 	static a4: Airplane
 	 
 definitions:
@@ -198,15 +198,15 @@ definitions:
 
 // INITIAL STATE
 default init s0:
-	function landingSequence($t in Time) = if $t = 5 then a1 else 
-										   if $t = 2 then a2 else
-										   if $t = 18 then a3 else
+	function landingSequence($t in Time) = if $t = 5 then fr1988 else 
+										   if $t = 2 then u21748 else
+										   if $t = 18 then fr1989 else
 										   if $t = 35 then a4 else 
 										   undef endif endif endif endif
 	function zoomValue = 30
 	function action = NONE
 	function selectedAirplane = undef
-	function statusOutput($t in Airplane) = if $t = a1 then UNSTABLE else if $t = a2 then FREEZE else STABLE endif endif	
+	function statusOutput($t in Airplane) = if $t = fr1988 then UNSTABLE else if $t = u21748 then FREEZE else STABLE endif endif	
 	function landingSequenceColor($t in Time) = if $t = 5 then YELLOW else
 												if $t = 2 then CYAN else
 												WHITE

@@ -24,7 +24,7 @@ public class SimpleCalculatorView extends JFrame implements AsmetaFMVCView {
 
 	
 	@AsmetaControlledLocation(asmLocationName="calc_result")
-    private JTextField calcresult     = new JTextField(20);
+    private JTextField calcresult     = new JTextField(8);
 	
     @AsmetaMonitoredLocation(asmLocationName="math_action", asmLocationValue = "INC")
     @AsmetaRunStep

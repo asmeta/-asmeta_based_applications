@@ -26,12 +26,12 @@ import asmeta.fmvclib.annotations.AsmetaRunStep;
 import asmeta.fmvclib.controller.ButtonColumn;
 import asmeta.fmvclib.view.AsmetaFMVCView;
 import asmeta.fmvclib.view.XButtonModel;
+import customcomponents.CustomSliderUI;
 
 public class AMANView implements AsmetaFMVCView {
 
 	private JFrame frame;
-
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "NONE")
+	
 	@AsmetaMonitoredLocation(asmLocationName = "zoom")
 	@AsmetaRunStep(repaintView = true)
 	private JSlider zoom;
@@ -62,7 +62,6 @@ public class AMANView implements AsmetaFMVCView {
 	@AsmetaControlledLocation(asmLocationName = "zoomValue")
 	JLabel lblZoomValue;
 
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "NONE")
 	@AsmetaRunStep
 	Timer guiTimer;
 
@@ -79,7 +78,6 @@ public class AMANView implements AsmetaFMVCView {
 	JSpinner spnrNumMoves;
 	SpinnerNumberModel modelSpnrNumMoves;
 
-	@AsmetaMonitoredLocation(asmLocationName = "action", asmLocationValue = "NONE")
 	@AsmetaMonitoredLocation(asmLocationName = "timeToLock")
 	@AsmetaControlledLocation(asmLocationName = "blocked")
 	@AsmetaRunStep
@@ -87,6 +85,7 @@ public class AMANView implements AsmetaFMVCView {
 	XButtonModel isLockedModel;
 	JTable isLocked;
 
+	@SuppressWarnings("serial")
 	public AMANView() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		
 		// The application frame
@@ -99,7 +98,12 @@ public class AMANView implements AsmetaFMVCView {
 		frame.setTitle("ASMETA Aman");
 
 		// The zoom slider
-		zoom = new JSlider();
+		zoom = new JSlider() {
+			@Override
+            public void updateUI() {
+                setUI(new CustomSliderUI(this));
+            }
+		};
 		zoom.setSnapToTicks(true);
 		zoom.setMajorTickSpacing(5);
 		zoom.setValue(30);
@@ -172,14 +176,19 @@ public class AMANView implements AsmetaFMVCView {
 		
 		// The panel containing data of minutes and hours
 		currentTimePanel = new JPanel();
-		currentTimePanel.setBounds(119, 0, 101, 40);
+		currentTimePanel.setBounds(110, 0, 110, 40);
 		currentTimePanel.setBackground(Color.black);
 		currentTimePanel.setOpaque(true);
 		currentTimePanel.setBorder(new LineBorder(Color.WHITE));
 		frame.getContentPane().add(currentTimePanel);
 		
 		// The current time hours
-		lblCurrentTimeHours = new JLabel("0");
+		lblCurrentTimeHours = new JLabel() {
+			@Override
+			public void setText(String text) {
+				super.setText(("00" + text).substring(text.length(), 2 + text.length()));
+			}
+		};
 		currentTimePanel.add(lblCurrentTimeHours);
 		lblCurrentTimeHours.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblCurrentTimeHours.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));
@@ -193,7 +202,12 @@ public class AMANView implements AsmetaFMVCView {
 		lblTwoDots.setForeground(Color.white);
 		
 		// The current time minutes
-		lblCurrentTimeMins = new JLabel("0");
+		lblCurrentTimeMins = new JLabel(){
+			@Override
+			public void setText(String text) {
+				super.setText(("00" + text).substring(text.length(), 2 + text.length()));
+			}
+		};
 		currentTimePanel.add(lblCurrentTimeMins);
 		lblCurrentTimeMins.setHorizontalAlignment(SwingConstants.LEFT);
 		lblCurrentTimeMins.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 24));

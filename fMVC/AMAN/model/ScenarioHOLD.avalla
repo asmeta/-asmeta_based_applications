@@ -1,18 +1,18 @@
 //// This scenario is composed of several steps
 //// Initially, no change is done in the first step
-//// In the second step, the a1 airplane is put on hold
-//// Lastly, the airpline a1 is moved UP
+//// In the second step, the fr1988 airplane is put on hold
+//// Lastly, the airpline fr1988 is moved UP
 scenario ScenarioMoveUP
 load aman2.asm
-check landingSequence(2) = a2;
-check landingSequence(5) = a1;
-set action := NONE;
+check landingSequence(2) = u21748;
+check landingSequence(5) = fr1988;
+set action := undef;
 step
-check landingSequence(2) = a2;
-check landingSequence(5) = a1;
-check zoomValue = 45;
-set selectedAirplane := a1;
+check landingSequence(2) = u21748;
+check landingSequence(5) = fr1988;
+check zoomValue = 30;
+set selectedAirplane := fr1988;
 set action := HOLD;
 step
-check landingSequence(2) = a2;
+check landingSequence(2) = u21748;
 check landingSequence(5) = undef;

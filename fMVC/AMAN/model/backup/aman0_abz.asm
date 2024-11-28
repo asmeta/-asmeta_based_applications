@@ -1,10 +1,10 @@
 // ABZ 2023 - fMVC
-// first version of AMAN - with undef when a aiplane is not found
-asm aman0_undef
+// with action NONE (original for ABZ article) - no longer usable
+asm aman0_abz
 
 import StandardLibrary
-import CTLlibrary
-import LTLlibrary
+import CTLLibrary
+import ../LTLLibrary
 export *
 
 signature:
@@ -39,9 +39,9 @@ signature:
 	static canBeMovedUp: Airplane -> Boolean
 	static canBeMovedDown: Airplane -> Boolean
 	
-	static a1: Airplane
-	static a2: Airplane
-	static a3: Airplane
+	static fr1988: Airplane
+	static u21748: Airplane
+	static fr1989: Airplane
 	static a4: Airplane
 	 
 definitions:
@@ -55,25 +55,22 @@ definitions:
 	// return -1 if $a is not found in the landing sequence
 	function search($a in Airplane, $t in TimeSlot) = 
 		if landingSequence($t) = $a then $t else 
-		if $t >= 10 then undef else 
+		if $t >= 10 then -1 else 
 		if $t < 10 then search($a, $t+1) 
-		else undef endif endif endif
+		else -1 endif endif endif
 	
 	function canBeMovedUp($airplane in Airplane) =
 		let ($currentLT = search($airplane, 0)) in
-		// if it is not in the sequence, it cannot be moved
-		if $currentLT = undef then false else
 			if ($currentLT + 1) <= 10 then if not isUndef(landingSequence($currentLT + 1)) then false
 			else if ($currentLT + 2) <= 10 then if not isUndef(landingSequence($currentLT + 2)) then false
 			else if ($currentLT + 3) <= 10 then if not isUndef(landingSequence($currentLT + 3)) then false
 			else if ($currentLT + 4) <= 10 then if not isUndef(landingSequence($currentLT + 4)) then false 
 			else true endif endif endif endif endif endif endif endif
-		endif endlet 
+			endlet 
 		
 	function canBeMovedDown($airplane in Airplane) =
 		let ($currentLT = search($airplane, 0)) in
-			if $currentLT = undef then false else
-			if $currentLT  >= 1 then
+			if ($currentLT - 1) >= 0 then
 			if not isUndef(landingSequence($currentLT - 1)) then false
 				else  
 					if ($currentLT - 2) >= 0 then 
@@ -89,8 +86,7 @@ definitions:
 								endif 
 							else true endif 
 						endif
-					else true endif endif endif 
-			endif
+					else true endif endif endif
 		endlet
 	
 
@@ -98,8 +94,7 @@ definitions:
 	// the PLAN ATCo decides to move up an airplane
 	rule r_moveUp($a in Airplane, $manual in Boolean) =
 		let ($currentLT = search($a, 0)) in
-		if $currentLT != undef then
-		if $currentLT < 10 then
+		if $currentLT != -1 and $currentLT < 10 then
 			let ($blk = blocked($currentLT + 1)) in
 				if $currentLT < zoomValue and not $blk and canBeMovedUp($a) then 
 				par  
@@ -110,13 +105,13 @@ definitions:
 				endpar 
 				endif 
 			endlet
-		endif endif endlet 
+		endif endlet 
 			
 	// the PLAN ATCo decides to move down an airplane
 	rule r_moveDown($a in Airplane, $manual in Boolean) =
 		let ($currentLT = search($a, 0)) in
-		if $currentLT != undef then
-			let ($blk = blocked($currentLT - 1)) in
+		let ($blk = blocked($currentLT - 1)) in
+		if $currentLT != -1 then
 			// The function is called by AMAN -> It is ok to execute without checking anything
 			if ($currentLT <= 0 and not $manual) then
 				par
@@ -137,13 +132,13 @@ definitions:
 					landingSequence($currentLT):= undef
 					landingSequenceColor($currentLT - 1) := landingSequenceColor($currentLT)
 					landingSequenceColor($currentLT) := WHITE
-				endpar endif endif endif endlet endif endlet
+				endpar endif endif endif endif endlet endlet
 						
 	// the PLAN ATCo decides to put an airplane on hold -> The airplane has to be removed 
 	// from the landing sequence and the color of the corresponding cell is set to white
 	rule r_hold($a in Airplane) = 
 		let ($currentLT = search($a, 0)) in
-		if $currentLT != undef then
+		if $currentLT != -1 then
 			par
 				landingSequence($currentLT) := undef
 				landingSequenceColor($currentLT) := WHITE
@@ -187,20 +182,20 @@ definitions:
 			r_update_zoom[]
 			
 			// Move airplanes
-			if selectedAirplane = a1 then
-				if action = UP then r_moveUp[a1, true] else
-				if action = DOWN then r_moveDown[a1, true] else
-				if action = HOLD then r_hold[a1] endif endif endif 
+			if selectedAirplane = fr1988 then
+				if action = UP then r_moveUp[fr1988, true] else
+				if action = DOWN then r_moveDown[fr1988, true] else
+				if action = HOLD then r_hold[fr1988] endif endif endif 
 			endif
-			if selectedAirplane = a2 then
-				if action = UP then r_moveUp[a2, true] else
-				if action = DOWN then r_moveDown[a2, true] else
-				if action = HOLD then r_hold[a2] endif endif endif 
+			if selectedAirplane = u21748 then
+				if action = UP then r_moveUp[u21748, true] else
+				if action = DOWN then r_moveDown[u21748, true] else
+				if action = HOLD then r_hold[u21748] endif endif endif 
 			endif
-			if selectedAirplane = a3 then
-				if action = UP then r_moveUp[a3, true] else
-				if action = DOWN then r_moveDown[a3, true] else
-				if action = HOLD then r_hold[a3] endif endif endif 
+			if selectedAirplane = fr1989 then
+				if action = UP then r_moveUp[fr1989, true] else
+				if action = DOWN then r_moveDown[fr1989, true] else
+				if action = HOLD then r_hold[fr1989] endif endif endif 
 			endif
 			if selectedAirplane = a4 then
 				if action = UP then r_moveUp[a4, true] else
@@ -211,13 +206,13 @@ definitions:
 
 // INITIAL STATE
 default init s0:
-	function landingSequence($t in TimeSlot) = if $t = 5 then a1 else 
-										   	   if $t = 2 then a2 else 
+	function landingSequence($t in TimeSlot) = if $t = 5 then fr1988 else 
+										   	   if $t = 2 then u21748 else 
 										   	   undef endif endif
 	function zoomValue = 30
 	function action = NONE
 	function selectedAirplane = undef
-	function statusOutput($t in Airplane) = if $t = a1 then UNSTABLE else if $t = a2 then FREEZE else STABLE endif endif	
+	function statusOutput($t in Airplane) = if $t = fr1988 then UNSTABLE else if $t = u21748 then FREEZE else STABLE endif endif	
 	function landingSequenceColor($t in TimeSlot) = if $t = 5 then YELLOW else
 												if $t = 2 then CYAN else
 												WHITE

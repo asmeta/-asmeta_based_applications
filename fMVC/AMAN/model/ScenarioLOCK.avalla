@@ -1,22 +1,28 @@
 //// This scenario is composed of several steps
 //// Initially, the time instant 1 is locked
 //// Then we try to move a2 in the time instant 1 and we check that nothing changes
-scenario ScenarioMoveUP
+scenario ScenarioLOCK
 load aman2.asm
-check landingSequence(2) = a2;
-check landingSequence(5) = a1;
-set action := NONE;
+check landingSequence(2) = u21748;
+check landingSequence(5) = fr1988;
+// lock time 1
 set timeToLock := 1;
+set action := undef;
+set zoom := 30;
 step
 check blocked(1) = true;
 check blocked(0) = false;
+set action := undef;
 set timeToLock := 0;
 step
 check blocked(1) = true;
 check blocked(0) = true;
-set selectedAirplane := a2;
+// 
+set selectedAirplane := u21748;
+set numMoves := 1;
 set action := DOWN;
+set timeToLock := undef;
 step
 check blocked(1) = true;
-check landingSequence(2) = a2;
-check landingSequence(5) = a1;
+check landingSequence(2) = u21748;
+check landingSequence(5) = fr1988;

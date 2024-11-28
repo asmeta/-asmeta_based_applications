@@ -1,9 +1,9 @@
-scenario test0
+scenario test7
 
-load ./model/aman2.asm
+load ../model/aman2.asm
 
-//// test name test@test0
-//// generated for (test goal): test0: NULL
+//// test name test@test7
+//// generated for (test goal): test7: NULL
 check landingSequence(30) = undef;
 check landingSequence(22) = undef;
 check landingSequence(12) = undef;
@@ -13,13 +13,15 @@ check landingSequence(26) = undef;
 check landingSequence(16) = undef;
 check landingSequence(24) = undef;
 check landingSequence(14) = undef;
+check lastTimeUpdated = 0;
 check landingSequence(28) = undef;
-check landingSequence(18) = a3;
+check landingSequence(18) = fr1989;
 check landingSequence(6) = undef;
 check landingSequence(8) = undef;
-check landingSequence(2) = a2;
+check landingSequence(2) = u21748;
 check landingSequence(4) = undef;
 check landingSequence(0) = undef;
+check zoomValue = 30;
 check landingSequence(11) = undef;
 check landingSequence(23) = undef;
 check landingSequence(31) = undef;
@@ -34,44 +36,12 @@ check landingSequence(29) = undef;
 check landingSequence(7) = undef;
 check landingSequence(9) = undef;
 check landingSequence(3) = undef;
-check landingSequence(5) = a1;
+check landingSequence(5) = fr1988;
 check landingSequence(1) = undef;
-check lastTimeUpdated = 0;
-check zoomValue = 30;
-set landingSequence(30) := undef;
-set landingSequence(22) := undef;
-set landingSequence(12) := undef;
-set landingSequence(20) := undef;
-set selectedAirplane := a4;
-set landingSequence(10) := undef;
-set landingSequence(26) := undef;
-set landingSequence(16) := undef;
-set landingSequence(24) := undef;
-set landingSequence(14) := undef;
-set numMoves := 44;
-set landingSequence(28) := undef;
-set landingSequence(6) := undef;
-set landingSequence(8) := undef;
-set landingSequence(4) := undef;
 set timeToLock := undef;
-set landingSequence(0) := undef;
+set selectedAirplane := u21749;
 set zoom := undef;
-set landingSequence(11) := undef;
-set landingSequence(23) := undef;
-set landingSequence(31) := undef;
-set landingSequence(21) := undef;
-set landingSequence(15) := undef;
-set landingSequence(27) := undef;
-set landingSequence(13) := undef;
-set landingSequence(25) := undef;
-set landingSequence(19) := undef;
-set landingSequence(17) := undef;
-set landingSequence(29) := undef;
-set landingSequence(7) := undef;
-set landingSequence(9) := undef;
-set landingSequence(3) := undef;
-set landingSequence(1) := undef;
-set action := DOWN;
+set action := HOLD;
 step
 check timeShown(44) = 45;
 check timeShown(12) = 13;
@@ -80,13 +50,13 @@ check timeShown(32) = 33;
 check timeShown(16) = 17;
 check timeShown(24) = 25;
 check timeShown(36) = 37;
+check mins = 0;
 check timeShown(40) = 41;
 check timeShown(8) = 9;
-check mins = 0;
+check zoomValue = 30;
 check timeShown(0) = 1;
 check timeShown(17) = 18;
 check timeShown(29) = 30;
-check zoomValue = 30;
 check timeShown(4) = 5;
 check timeShown(33) = 34;
 check timeShown(21) = 22;
@@ -95,6 +65,7 @@ check timeShown(13) = 14;
 check timeShown(25) = 26;
 check timeShown(41) = 42;
 check timeShown(9) = 10;
+check lastTimeUpdated = 0;
 check timeShown(1) = 2;
 check timeShown(18) = 19;
 check timeShown(5) = 6;
@@ -106,12 +77,12 @@ check timeShown(26) = 27;
 check timeShown(38) = 39;
 check timeShown(14) = 15;
 check timeShown(30) = 31;
-check hours = 0;
 check timeShown(6) = 7;
 check timeShown(19) = 20;
 check timeShown(39) = 40;
 check timeShown(2) = 3;
 check timeShown(11) = 12;
+check hours = 0;
 check timeShown(23) = 24;
 check timeShown(31) = 32;
 check timeShown(43) = 44;
@@ -119,14 +90,87 @@ check timeShown(15) = 16;
 check timeShown(27) = 28;
 check timeShown(35) = 36;
 check timeShown(7) = 8;
-check lastTimeUpdated = 0;
 check timeShown(28) = 29;
 check timeShown(3) = 4;
+set timeToLock := undef;
 set action := undef;
-set zoom := 42;
+set selectedAirplane := u21748;
+set zoom := 20;
 step
+check mins = 0;
+check lastTimeUpdated = 0;
+check hours = 0;
+check zoomValue = 20;
+set timeToLock := undef;
+set action := undef;
+set selectedAirplane := fr1989;
+set zoom := 38;
+step
+check hours = 0;
+check zoomValue = 20;
 check lastTimeUpdated = 0;
 check mins = 0;
-check zoomValue = 30;
+set numMoves := 28;
+set zoom := undef;
+set selectedAirplane := u21748;
+set timeToLock := undef;
+set action := DOWN;
+step
+check mins = 0;
+check blocked(7) = false;
+check zoomValue = 20;
+check lastTimeUpdated = 0;
 check hours = 0;
+set selectedAirplane := fr1989;
+set action := undef;
+set zoom := undef;
+set timeToLock := 7;
+step
+check lastTimeUpdated = 0;
+check blocked(7) = true;
+check zoomValue = 20;
+check mins = 0;
+check hours = 0;
+set zoom := undef;
+set timeToLock := undef;
+set selectedAirplane := u21748;
+set action := undef;
+step
+check mins = 0;
+check zoomValue = 20;
+check lastTimeUpdated = 0;
+check hours = 0;
+set numMoves := 12;
+set timeToLock := undef;
+set selectedAirplane := u21749;
+set zoom := undef;
+set action := DOWN;
+step
+check mins = 0;
+check zoomValue = 20;
+check hours = 0;
+check lastTimeUpdated = 0;
+set selectedAirplane := u21748;
+set action := undef;
+set timeToLock := undef;
+set zoom := 45;
+step
+check landingSequence(33) = undef;
+check landingSequence(34) = undef;
+check landingSequence(32) = undef;
+check landingSequence(35) = u21749;
+check lastTimeUpdated = 0;
+check mins = 0;
+check hours = 0;
+check zoomValue = 45;
+set timeToLock := undef;
+set zoom := undef;
+set selectedAirplane := u21749;
+set numMoves := 24;
+set action := UP;
+step
+check lastTimeUpdated = 0;
+check hours = 0;
+check mins = 0;
+check zoomValue = 45;
 step

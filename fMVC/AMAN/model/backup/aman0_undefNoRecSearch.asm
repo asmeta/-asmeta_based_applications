@@ -1,14 +1,14 @@
 // ABZ 2023 - fMVC
 // first version of AMAN
-// - make use of undef instead of NONE for actions (correct) 
-// - search returns undef when a airplane is not found (correct)
-//   (problem with undef is that it traslates to null sometimes in NuSMV - see version MC for model chcking)
+// - make use of undef instead of NONE for actions
+// - search returns undef when a airplane is not found
+// - search is defined with a case instead of a recursive function
 
-asm aman0
+asm aman0_undefNoRecSearch
 
 import StandardLibrary
 import CTLLibrary
-import LTLLibrary
+//import LTLLibrary
 export *
 
 signature:
@@ -18,7 +18,7 @@ signature:
 	abstract domain Airplane
 	enum domain Status = {UNSTABLE, STABLE, FREEZE}
 	enum domain Color = {YELLOW, CYAN, WHITE}
-	enum domain PTCOAction = {UP, DOWN, HOLD}
+	enum domain PTCOAction = {UP, DOWN, NONE, HOLD}
 	
 	// FUNCTIONS
 	// Landing sequence: it should be bijective partially defined
@@ -37,11 +37,11 @@ signature:
 	controlled zoomValue : ZoomValue
 	controlled landingSequenceColor: TimeSlot -> Color
 	
-	// Recursive function
-	derived search: Prod(Airplane,TimeSlot) -> TimeSlot
+	// NON Recursive function
+	static search: Airplane -> TimeSlot
 	// Function checking whether an airplane can be moved in the new position
-	derived canBeMovedUp: Airplane -> Boolean
-	derived canBeMovedDown: Airplane -> Boolean
+	static canBeMovedUp: Airplane -> Boolean
+	static canBeMovedDown: Airplane -> Boolean
 	
 	static fr1988: Airplane
 	static u21748: Airplane
@@ -51,22 +51,31 @@ signature:
 definitions:
 	
 	// DOMAIN DEFINITIONS
-	domain TimeSlot = {0 : 20}
+	domain TimeSlot = {0 : 10}
 	domain ZoomValue = {15 : 45}
 	
 	// FUNCTION DEFINITIONS
 	// The function searches the airplane with the specified landing time
 	// return undef if $a is not found in the landing sequence
-	function search($a in Airplane, $t in TimeSlot) = 
-		if landingSequence($t) = $a then $t else 
-		if $t >= 10 then undef else 
-		if $t < 10 then search($a, $t+1) 
-		else undef endif endif endif
+	function search($a in Airplane) = 
+		if landingSequence(0) = $a then 0 else 
+		if landingSequence(1) = $a then 1 else 
+		if landingSequence(2) = $a then 2 else 
+		if landingSequence(3) = $a then 3 else 
+		if landingSequence(4) = $a then 4 else 
+		if landingSequence(5) = $a then 5 else 
+		if landingSequence(6) = $a then 6 else 
+		if landingSequence(7) = $a then 7 else 
+		if landingSequence(8) = $a then 8 else 
+		if landingSequence(9) = $a then 9 else 
+		if landingSequence(10) = $a then 10 else 
+		undef 
+		endif endif endif endif endif endif endif endif endif endif endif
 	
 	function canBeMovedUp($airplane in Airplane) =
-		let ($currentLT = search($airplane, 0)) in
+		let ($currentLT = search($airplane)) in
 		// if it is not in the sequence, it cannot be moved
-//		if $currentLT = undef then false else // use direct of undef as a term instead of a function
+//		if $currentLT = undef then false else
 		if isUndef($currentLT) then false else
 // check that all the four slots up are undef (free)
 			if ($currentLT + 1) <= 10 then if not isUndef(landingSequence($currentLT + 1)) then false
@@ -77,7 +86,7 @@ definitions:
 		endif endlet 
 		
 	function canBeMovedDown($airplane in Airplane) =
-		let ($currentLT = search($airplane, 0)) in
+		let ($currentLT = search($airplane)) in
 //			if $currentLT = undef then false else
 			if isUndef($currentLT) then false else
 			if $currentLT  >= 1 then
@@ -104,7 +113,7 @@ definitions:
 	// RULE DEFINITIONS
 	// the PLAN ATCo decides to move up an airplane
 	rule r_moveUp($a in Airplane, $manual in Boolean) =
-		let ($currentLT = search($a, 0)) in
+		let ($currentLT = search($a)) in
 //		if $currentLT != undef then
 		if not isUndef($currentLT) then
 		if $currentLT < 10 then
@@ -122,7 +131,7 @@ definitions:
 			
 	// the PLAN ATCo decides to move down an airplane
 	rule r_moveDown($a in Airplane, $manual in Boolean) =
-		let ($currentLT = search($a, 0)) in
+		let ($currentLT = search($a)) in
 // TODO smv wants the function and not the comparison with undef
 //		if $currentLT != undef then  
 //		if isDef($currentLT) then
@@ -153,7 +162,7 @@ definitions:
 	// the PLAN ATCo decides to put an airplane on hold -> The airplane has to be removed 
 	// from the landing sequence and the color of the corresponding cell is set to white
 	rule r_hold($a in Airplane) = 
-		let ($currentLT = search($a, 0)) in
+		let ($currentLT = search($a)) in
 //		if $currentLT != undef then
 		if not isUndef($currentLT) then
 			par
@@ -186,7 +195,7 @@ definitions:
 //	// REQ15: The HOLD button must be available only when one aircraft label is selected
 //	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and isUndef(selectedAirplane) and action = HOLD implies x(search($a, 0) = $t)))
 //	// REQ3: Planes can be moved earlier or later on the timeline
-	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = UP and canBeMovedUp($a) implies x(search($a, 0) = $t + 1)))
+//	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a) = $t and selectedAirplane=$a and action = UP and canBeMovedUp($a) implies x(search($a) = $t + 1)))
 //	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = DOWN and canBeMovedDown($a) implies x(search($a, 0) = ($t - 1))))
 	// REQ4: Planes can be put on hold by the PLAN ATCo
 //	LTLSPEC (forall $a in Airplane, $t in TimeSlot with g(search($a, 0) = $t and selectedAirplane=$a and action = HOLD implies x(isUndef(landingSequence($t)))))	
@@ -195,7 +204,7 @@ definitions:
 	main rule r_Main =
 		par		
 			// Update GUI
-			if action = undef then r_update_lock[] endif
+			if action = NONE then r_update_lock[] endif
 			r_update_zoom[]
 			
 			// Move airplanes
@@ -228,7 +237,7 @@ default init s0:
 										   	   if $t = 2 then u21748 else 
 										   	   undef endif endif
 	function zoomValue = 30
-	function action = undef
+	function action = NONE
 	function selectedAirplane = undef
 	function statusOutput($t in Airplane) = if $t = fr1988 then UNSTABLE else if $t = u21748 then FREEZE else STABLE endif endif	
 	function landingSequenceColor($t in TimeSlot) = if $t = 5 then YELLOW else
