@@ -1,5 +1,4 @@
- asm MVMcontrollerAdapt
-//Third refinement: transition from inspiration to expiration and vice versa 
+ asm MVMcontrollerAdapt 
 
 import ../CTLlibrary
 import ../LTLlibrary
